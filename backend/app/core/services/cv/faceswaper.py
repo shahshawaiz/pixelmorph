@@ -55,71 +55,92 @@ try:
 except Exception as e:
     print(f"Failed to load the face swapper model: {e}")
 
-def process_video(source_img, target_video_path, output_video_path, time_limit=45, frame_skip=2):
+# Assuming APP_INSIGHTFACE and SWAPPER are pre-configured instances of face detection and swapping utilities.
+def process_video(source_img, target_video_path, output_video_path, time_limit=10, frame_skip=0):
     """
     Processes a video to perform face swapping for the first `time_limit` seconds.
     Skips every `frame_skip` frames to optimize processing.
+
+    Parameters:
+        source_img (ndarray): The source image containing the face to swap.
+        target_video_path (str): Path to the target video file.
+        output_video_path (str): Path to save the output video with swapped faces.
+        time_limit (int, optional): Maximum processing time in seconds. Defaults to 60.
+        frame_skip (int, optional): Number of frames to skip between processing. Defaults to 2.
+
+    Raises:
+        Exception: If no faces are detected in the source image or the video cannot be opened.
     """
-    # Detect faces in the source image
-    source_faces = APP_INSIGHTFACE.get(source_img)
-    if len(source_faces) == 0:
-        raise Exception("No faces detected in the source image.")
-    source_face = source_faces[0]
+    try:
+        # Detect faces in the source image
+        source_faces = APP_INSIGHTFACE.get(source_img)
+        if not source_faces:
+            raise Exception("No faces detected in the source image.")
 
-    # Open the target video
-    cap = cv2.VideoCapture(str(target_video_path))
-    if not cap.isOpened():
-        raise Exception(f"Failed to open video: {target_video_path}")
+        source_face = source_faces[0]
 
-    # Get video properties
-    fps = int(cap.get(cv2.CAP_PROP_FPS))
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        # Open the target video
+        cap = cv2.VideoCapture(target_video_path)
+        if not cap.isOpened():
+            raise Exception(f"Failed to open video: {target_video_path}")
 
-    # Create a video writer for the output
-    out = cv2.VideoWriter(str(output_video_path), fourcc, fps, (width, height))
+        # Get video properties
+        fps = int(cap.get(cv2.CAP_PROP_FPS))
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
-    frame_count = 0
-    max_frames = int(fps * time_limit)  # Limit processing to `time_limit` seconds
-    start_time = time()
 
-    while frame_count < max_frames:
-        ret, frame = cap.read()
-        if not ret:
-            break  # End of video
+        # Create a video writer for the output
+        out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
-        # Skip frames to optimize processing
-        if frame_count % frame_skip != 0:
+        frame_count = 0
+        max_frames = int(fps * time_limit)  # Limit processing to `time_limit` seconds
+        start_time = time()
+
+        while frame_count < max_frames:
+            ret, frame = cap.read()
+            if not ret:
+                print("End of video or error reading frame.")
+                break
+
+            # Skip frames to optimize processing
+            # if frame_count % frame_skip != 0:
+            #     frame_count += 1
+            #     continue
+
+            # Detect faces in the current frame
+            target_faces = APP_INSIGHTFACE.get(frame)
+
+            if target_faces:
+                # Perform face swapping on the first detected face
+                target_face = target_faces[0]
+                swapped_frame = SWAPPER.get(frame, target_face, source_face, paste_back=True)
+            else:
+                # No faces detected; use the original frame
+                swapped_frame = frame
+
+            # Write the processed frame to the output video
+            out.write(swapped_frame)
+
             frame_count += 1
-            continue
 
-        # Detect faces in the current frame
-        target_faces = APP_INSIGHTFACE.get(frame)
+            # Stop processing if it exceeds `time_limit` seconds
+            if time() - start_time > time_limit:
+                print(f"Time limit of {time_limit} seconds reached. Stopping early.")
+                break
 
-        if len(target_faces) > 0:
-            # Perform face swapping on the first detected face
-            target_face = target_faces[0]
-            swapped_frame = SWAPPER.get(frame, target_face, source_face, paste_back=True)
-        else:
-            # No faces detected; use the original frame
-            swapped_frame = frame
+        print("Video processing completed successfully.")
 
-        # Write the processed frame to the output video
-        out.write(swapped_frame)
+    except Exception as e:
+        print(f"Error during video processing: {e}")
 
-        frame_count += 1
-
-        # Stop processing if it exceeds `time_limit` seconds
-        if time() - start_time > time_limit:
-            print(f"Time limit of {time_limit} seconds reached. Stopping early.")
-            break
-
-    # Release resources
-    cap.release()
-    out.release()
-
-    print(f"Video processing completed. Processed up to {time_limit} seconds.")
+    finally:
+        # Release resources
+        if 'cap' in locals() and cap.isOpened():
+            cap.release()
+        if 'out' in locals():
+            out.release()
 
 def faceswap(session_id, assets_dir, source, target, output_filename):
     # Extract extensions

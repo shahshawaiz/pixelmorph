@@ -2,13 +2,11 @@
 from pathlib import Path
 from uuid import uuid4
 import traceback
-import aiofiles
 
 from fastapi.staticfiles import StaticFiles
-from fastapi import FastAPI, HTTPException, UploadFile, File, Request, Response, status
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.responses import FileResponse
 
 from core.services.cv.bgremover import remove_background
 from core.services.cv.faceswaper import faceswap
@@ -22,9 +20,6 @@ MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 def setup_app():
     app = FastAPI()
 
-    # Mount the assets directory for serving files
-    app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
-
     # CORS configuration
     app.add_middleware(
         CORSMiddleware,
@@ -33,68 +28,9 @@ def setup_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-    @app.get("/assets/{file_name}")
-    async def stream_video(file_name: str, request: Request):
-        file_path = ASSETS_DIR / file_name
-
-        if not file_path.exists():
-            raise HTTPException(status_code=404, detail="File not found")
-
-        file_size = file_path.stat().st_size
-        range_header = request.headers.get("range")
-
-        if not range_header:
-            # Return the full file with proper headers
-            return Response(
-                content=file_path.read_bytes(),
-                media_type="video/mp4",
-                headers={
-                    "Accept-Ranges": "bytes",
-                    "Content-Length": str(file_size),
-                    "Cache-Control": "public, max-age=3600",
-                },
-            )
-
-        try:
-            # Parse range header
-            start_str, end_str = range_header.replace("bytes=", "").split("-")
-            start = int(start_str) if start_str else 0
-            end = int(end_str) if end_str else file_size - 1
-
-            # Validate range
-            if start >= file_size:
-                raise HTTPException(
-                    status_code=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE,
-                    detail=f"Start byte {start} exceeds file size {file_size}",
-                )
-
-            end = min(end, file_size - 1)
-            chunk_size = end - start + 1
-
-            # Read and return the requested chunk
-            async with await aiofiles.open(file_path, mode="rb") as video:
-                await video.seek(start)
-                chunk = await video.read(chunk_size)
-
-            return Response(
-                content=chunk,
-                status_code=status.HTTP_206_PARTIAL_CONTENT,
-                headers={
-                    "Content-Range": f"bytes {start}-{end}/{file_size}",
-                    "Accept-Ranges": "bytes",
-                    "Content-Length": str(chunk_size),
-                    "Content-Type": "video/mp4",
-                    "Cache-Control": "public, max-age=3600",
-                },
-            )
-
-        except ValueError:
-            raise HTTPException(
-                status_code=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE,
-                detail="Invalid range header format",
-            )
-
+    
+    # Mount the assets directory for serving files
+    app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
 
     @app.post("/background-remover")
     async def run_background_remover(file: UploadFile = File(...)):

@@ -88,7 +88,7 @@ const FaceSwap = () => {
   }, [baseFile, targetFile]);
 
   return (
-    <Layout>
+    <div>
       {loading && <Loader />}
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-10 px-4">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-6xl w-full">
@@ -165,7 +165,7 @@ const FaceSwap = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 
