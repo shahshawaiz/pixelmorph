@@ -11,8 +11,12 @@ import numpy as np
 # Initialize FaceAnalysis and Swapper
 APP_INSIGHTFACE = FaceAnalysis(name="buffalo_l")
 APP_INSIGHTFACE.prepare(ctx_id=0, det_size=(640, 640))
-SWAPPER = insightface.model_zoo.get_model("core/assets/models/faceswapper/inswapper_128.onnx", download=False)
 
+try:
+    SWAPPER = insightface.model_zoo.get_model("core/assets/models/faceswapper/inswapper_128.onnx", download=False)
+except Exception as e:
+    print(f"Failed to load the face swapper model: {e}")
+    
 def process_video(source_img, target_video_path, output_video_path, time_limit=45, frame_skip=2):
     """
     Processes a video to perform face swapping for the first `time_limit` seconds.
