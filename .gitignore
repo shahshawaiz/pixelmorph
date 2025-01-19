@@ -1,0 +1,7 @@
+.vscode
+*.env
+.DS_Store
+
+
+frontend/.env
+backend/app/core/assets/models/faceswapper/**

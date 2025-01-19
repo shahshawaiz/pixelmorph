@@ -1,0 +1,4 @@
+CustomerID,Age,MonthlyCharges,Tenure,InternetService,PhoneService,Contract,PaymentMethod
+6,28,65.3,7,Fiber,Yes,Month-to-month,Credit card
+7,32,40.8,15,DSL,Yes,Two year,Electronic check
+8,50,75.0,3,Fiber,No,Month-to-month,Mailed check
