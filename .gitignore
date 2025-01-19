@@ -8,5 +8,5 @@ frontend/.env
 docs/scripts/*
 # backend/app/core/assets/models/faceswapper/**
 backend/app/core/assets/datasets/**
-backend/app/core/assets/uploads/*.mp4
-backend/app/core/assets/uploads/*.png
+backend/app/core/assets/uploads/**.mp4
+backend/app/core/assets/uploads/**.png
