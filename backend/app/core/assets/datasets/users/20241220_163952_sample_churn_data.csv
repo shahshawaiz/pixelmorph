@@ -1,6 +1,0 @@
-CustomerID,Age,MonthlyCharges,Tenure,InternetService,PhoneService,Contract,PaymentMethod,Churn
-1,25,50.5,12,DSL,Yes,Month-to-month,Credit card,0
-2,34,70.0,4,Fiber,No,Two year,Bank transfer,1
-3,45,80.3,20,Fiber,Yes,One year,Credit card,0
-4,23,40.1,8,DSL,Yes,Month-to-month,Electronic check,1
-5,36,55.2,10,DSL,No,Two year,Mailed check,0

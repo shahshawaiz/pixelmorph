@@ -170,10 +170,13 @@ const FaceSwap = () => {
 };
 
 const Loader = () => (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div className="text-center">
-      <div className="loader spinner-border animate-spin inline-block w-12 h-12 border-4 rounded-full text-white"></div>
-      <p className="text-white text-lg mt-4">Please do not refresh the screen...</p>
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-70 z-50">
+    <div className="flex flex-col items-center">
+      {/* Updated spinner styling */}
+      <div className="loader animate-spin inline-block w-16 h-16 border-4 border-t-blue-500 border-b-blue-500 border-l-transparent border-r-transparent rounded-full"></div>
+      <p className="text-white text-lg mt-4 font-medium">
+        Processing... Please wait
+      </p>
     </div>
   </div>
 );
