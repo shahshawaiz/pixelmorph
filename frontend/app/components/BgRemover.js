@@ -73,8 +73,8 @@ const BgRemover = () => {
   }, [image]);
 
   return (
-    <Layout>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-10 px-4">
+    <div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 ">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-6xl w-full">
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Background Remover</h1>
 
@@ -173,7 +173,7 @@ const BgRemover = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 
