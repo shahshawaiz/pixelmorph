@@ -11,8 +11,8 @@ services:
     tty: true         # Equivalent to -t
     env_file:
       - ./.env  # Path to the .env file
-    volumes:
-      - ./backend/app:/app      
+    # volumes:
+    #   - ./backend/app:/app      
     # restart: always
     networks:
       - webnet      
@@ -30,8 +30,8 @@ services:
     env_file:
       - ./frontend/.env  # Path to the .env file
     restart: always
-    volumes:
-      - ./frontend/app:/app
+    # volumes:
+    #   - ./frontend/app:/app
     networks:
       - webnet  
 
