@@ -3,5 +3,7 @@
 .DS_Store
 
 
+.env
 frontend/.env
+docs/scripts/*
 backend/app/core/assets/models/faceswapper/**
