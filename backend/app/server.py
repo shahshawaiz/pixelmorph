@@ -66,7 +66,7 @@ def setup_app():
                 f.write(content)
 
             # rmeove bg
-            removal_success = remove_background(input_path, output_path)
+            removal_success = await remove_background(input_path, output_path)
 
             if removal_success:
                 return {
