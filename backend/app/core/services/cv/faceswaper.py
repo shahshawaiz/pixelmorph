@@ -2,71 +2,26 @@ import shutil
 from pathlib import Path
 from uuid import uuid4
 from time import time
-import os
-import requests
+from typing import Dict, List, Tuple
+from fastapi import UploadFile
 
-import cv2
-from insightface.app import FaceAnalysis
-import insightface
 import numpy as np
+import cv2
 
-# Define model variables
-MODEL_URL = "https://huggingface.co/ezioruan/inswapper_128.onnx/resolve/main/inswapper_128.onnx"
-MODEL_LOCATION = "core/assets/models/faceswapper"
-MODEL_NAME = "inswapper_128.onnx"
-MODEL_PATH = os.path.join(MODEL_LOCATION, MODEL_NAME)
+from core.services.cv.utils import get_faceswapper
 
-# Your Hugging Face token
-HUGGINGFACE_TOKEN = os.getenv("HF_TOKEN")
+# get faceswapper
+APP_INSIGHTFACE, SWAPPER = get_faceswapper()
 
-# Ensure the target directory exists
-os.makedirs(MODEL_LOCATION, exist_ok=True)
-
-# Check if the model already exists, if not, download it
-if not os.path.isfile(MODEL_PATH):
-    try:
-        print(f"Downloading model from {MODEL_URL}...")
-        headers = {"Authorization": f"Bearer {HUGGINGFACE_TOKEN}"}
-        response = requests.get(MODEL_URL, headers=headers, stream=True)
-        response.raise_for_status()
-        with open(MODEL_PATH, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        print(f"Model downloaded successfully to {MODEL_PATH}.")
-    except Exception as e:
-        print(f"Error downloading the model: {e}")
-        exit(1)
-else:
-    print(f"Model already exists at {MODEL_PATH}. Skipping download.")
-
-# Attempt to load the model
-try:
-    SWAPPER = insightface.model_zoo.get_model(MODEL_PATH, download=False)
-    print("Face swapper model loaded successfully.")
-except Exception as e:
-    print(f"Failed to load the face swapper model: {e}")
-
-# Initialize FaceAnalysis and Swapper
-APP_INSIGHTFACE = FaceAnalysis(name="buffalo_l")
-APP_INSIGHTFACE.prepare(ctx_id=0, det_size=(640, 640))
-
-try:
-    SWAPPER = insightface.model_zoo.get_model("core/assets/models/faceswapper/inswapper_128.onnx", download=False)
-except Exception as e:
-    print(f"Failed to load the face swapper model: {e}")
-
-# Assuming APP_INSIGHTFACE and SWAPPER are pre-configured instances of face detection and swapping utilities.
-def process_video(source_img, target_video_path, output_video_path, time_limit=10, frame_skip=0):
+async def process_video(source_img, target_video_path, output_video_path, time_limit=5):
     """
     Processes a video to perform face swapping for the first `time_limit` seconds.
-    Skips every `frame_skip` frames to optimize processing.
 
     Parameters:
         source_img (ndarray): The source image containing the face to swap.
         target_video_path (str): Path to the target video file.
         output_video_path (str): Path to save the output video with swapped faces.
-        time_limit (int, optional): Maximum processing time in seconds. Defaults to 60.
-        frame_skip (int, optional): Number of frames to skip between processing. Defaults to 2.
+        time_limit (int, optional): Maximum processing time in seconds. Defaults to 10.
 
     Raises:
         Exception: If no faces are detected in the source image or the video cannot be opened.
@@ -88,26 +43,23 @@ def process_video(source_img, target_video_path, output_video_path, time_limit=1
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
+        # Calculate the maximum number of frames to process
+        max_frames = min(int(fps * time_limit), total_frames)
 
-        # Create a video writer for the output
+        # Define codec and create video writer
+        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
         out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
         frame_count = 0
-        max_frames = int(fps * time_limit)  # Limit processing to `time_limit` seconds
-        start_time = time()
 
+        # Process frames
         while frame_count < max_frames:
             ret, frame = cap.read()
             if not ret:
                 print("End of video or error reading frame.")
                 break
-
-            # Skip frames to optimize processing
-            # if frame_count % frame_skip != 0:
-            #     frame_count += 1
-            #     continue
 
             # Detect faces in the current frame
             target_faces = APP_INSIGHTFACE.get(frame)
@@ -125,11 +77,6 @@ def process_video(source_img, target_video_path, output_video_path, time_limit=1
 
             frame_count += 1
 
-            # Stop processing if it exceeds `time_limit` seconds
-            if time() - start_time > time_limit:
-                print(f"Time limit of {time_limit} seconds reached. Stopping early.")
-                break
-
         print("Video processing completed successfully.")
 
     except Exception as e:
@@ -142,7 +89,10 @@ def process_video(source_img, target_video_path, output_video_path, time_limit=1
         if 'out' in locals():
             out.release()
 
-def faceswap(session_id, assets_dir, source, target, output_filename):
+async def faceswap(session_id, assets_dir, source, target, output_filename):
+    if APP_INSIGHTFACE is None or SWAPPER is None:
+        raise Exception("Failed to load the face swapper model.")
+    
     # Extract extensions
     source_extension = Path(source.filename).suffix.lower()
     target_extension = Path(target.filename).suffix.lower()
@@ -172,7 +122,7 @@ def faceswap(session_id, assets_dir, source, target, output_filename):
             raise Exception(f"Source image could not be read: {source_path}")
 
         output_video_path = output_path
-        process_video(source_img, target_path, output_video_path)
+        await process_video(source_img, target_path, output_video_path)
     else:
         print("Processing image...")
         source_img = cv2.imread(str(source_path))
@@ -204,3 +154,82 @@ def faceswap(session_id, assets_dir, source, target, output_filename):
             raise Exception(f"Failed to save the output image: {e}")
 
     return True, output_path
+
+async def multifaceswap(session_id: str, assets_dir: Path, source, target, face_index: int, output_filename: str):
+    """
+    source: the uploaded group image (with multiple faces)
+    target: the uploaded replacement face image
+    face_index: 0-indexed index of the face in the group image to replace.
+    output_filename: base filename for the output.
+    """
+    # Save the uploaded files.
+    source_extension = Path(source.filename).suffix.lower()
+    target_extension = Path(target.filename).suffix.lower()
+    source_path = assets_dir / f"{session_id}_group{source_extension}"
+    target_path = assets_dir / f"{session_id}_replacement{target_extension}"
+
+    with open(source_path, "wb") as f:
+        f.write(await source.read())
+    with open(target_path, "wb") as f:
+        f.write(await target.read())
+
+    # Read images.
+    group_img = cv2.imread(str(source_path))
+    replacement_img = cv2.imread(str(target_path))
+    if group_img is None or replacement_img is None:
+        raise Exception("Invalid image file")
+
+    # Detect faces in the group image.
+    group_faces = APP_INSIGHTFACE.get(group_img)
+    if len(group_faces) == 0:
+        raise Exception("No faces detected in the group image")
+    if face_index < 0 or face_index >= len(group_faces):
+        raise Exception("Invalid face index selected")
+    selected_face = group_faces[face_index]
+
+    # Detect face in the replacement image.
+    replacement_faces = APP_INSIGHTFACE.get(replacement_img)
+    if not replacement_faces:
+        raise Exception("No face detected in the replacement image")
+    replacement_face = replacement_faces[0]
+
+    # Swap the selected face in the group image with the replacement face.
+    # IMPORTANT: The group image is updated.
+    result_img = SWAPPER.get(group_img, selected_face, replacement_face, paste_back=True)
+
+    output_path = assets_dir / f"{output_filename}.png"
+    if not cv2.imwrite(str(output_path), result_img):
+        raise Exception("Error writing output image")
+
+    return True, output_path
+
+
+async def detect_faces_from_image(img, input_path: Path) -> Tuple[List, List[Dict]]:
+    """
+    Expects 'img' to be a NumPy array (loaded via cv2.imread).
+    Returns a tuple (detected_faces, face_boxes) where face_boxes is a list
+    of dictionaries (each with keys: x, y, width, height) that are JSON serializable.
+    """
+    detected_faces = APP_INSIGHTFACE.get(img)  # Adjust as needed for your model.
+    face_boxes = []
+    for face in detected_faces:
+        if isinstance(face, dict):
+            bbox = face.get('bbox')
+            if bbox is None:
+                continue
+            bbox_list = [float(x) for x in bbox]
+        else:
+            bbox_list = [float(face.x), float(face.y), float(face.width), float(face.height)]
+        if len(bbox_list) >= 4:
+            face_boxes.append({
+                "x": bbox_list[0],
+                "y": bbox_list[1],
+                "width": bbox_list[2],
+                "height": bbox_list[3]
+            })
+    # Clean up the temporary file.
+    try:
+        input_path.unlink()
+    except Exception:
+        pass
+    return detected_faces, face_boxes

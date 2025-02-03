@@ -4,7 +4,7 @@ import traceback
 from typing import Optional
 
 
-def remove_background(input_path: str, output_path: str) -> Optional[bool]:
+async def remove_background(input_path: str, output_path: str) -> Optional[bool]:
     """
     Removes the background from an image file.
 

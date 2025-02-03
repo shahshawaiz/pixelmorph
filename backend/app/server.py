@@ -2,14 +2,16 @@
 from pathlib import Path
 from uuid import uuid4
 import traceback
+import cv2
 
 from fastapi.staticfiles import StaticFiles
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from core.services.cv.bgremover import remove_background
-from core.services.cv.faceswaper import faceswap
+from core.services.cv.faceswaper import faceswap, detect_faces_from_image, multifaceswap
+from core.services.cv.faceshapedetector import detect_faceshape
 
 # Directory setup
 ASSETS_DIR = Path("core/assets/uploads")
@@ -103,7 +105,7 @@ def setup_app():
             output_filename = f"{session_id}_output"
 
             # run faceswap
-            is_success, output_filename_with_ext = faceswap(session_id, ASSETS_DIR, source, target, output_filename)
+            is_success, output_filename_with_ext = await faceswap(session_id, ASSETS_DIR, source, target, output_filename)
             
             if is_success:
                 return JSONResponse(
@@ -129,7 +131,122 @@ def setup_app():
                 if path.exists():
                     path.unlink()
 
-                    
+    @app.post("/multifaceswap")
+    async def run_multifaceswap(
+        source: UploadFile = File(...),
+        target: UploadFile = File(...),
+        face_index: int = Form(...),
+        video: bool = Form(False)
+    ):
+        try:
+            session_id = str(uuid4())
+            output_filename = f"{session_id}_output"
+            source_extension = Path(source.filename).suffix.lower()
+            target_extension = Path(target.filename).suffix.lower()
+            source_path = ASSETS_DIR / f"{session_id}_input_source{source_extension}"
+            target_path = ASSETS_DIR / f"{session_id}_input_target{target_extension}"
+
+            is_success, output_path = await multifaceswap(session_id, ASSETS_DIR, source, target, face_index, output_filename)
+            return JSONResponse(
+                content={
+                    "message": "Multi-face swap completed successfully",
+                    "output_file": str(output_path.name)
+                },
+                status_code=200,
+            )
+        except Exception as e:
+            traceback.print_exc()
+            raise HTTPException(status_code=500, detail=f"Multi-face swap processing error: {str(e)}")
+        finally:
+            # Cleanup temporary source and target files.
+            for path in [source_path, target_path]:
+                if path.exists():
+                    path.unlink()
+
+
+    @app.post("/facedetect")
+    async def face_detect(file: UploadFile = File(...)):
+        """
+        Endpoint for face detection that draws boxes on the image.
+        The endpoint returns the filename of the annotated image.
+        """
+        try:
+            session_id = str(uuid4())
+            input_path = ASSETS_DIR / f"{session_id}_input.png"
+            content = await file.read()
+            with open(input_path, "wb") as f:
+                f.write(content)
+            img = cv2.imread(str(input_path))
+            if img is None:
+                raise HTTPException(status_code=400, detail="Invalid image file")
+            # Run face detection.
+            _, face_boxes = await detect_faces_from_image(img, input_path)
+            # Draw boxes and face numbers on a copy of the image.
+            annotated_img = img.copy()
+            for i, box in enumerate(face_boxes):
+                x = int(box["x"])
+                y = int(box["y"])
+                w = int(box["width"])
+                h = int(box["height"])
+                cv2.rectangle(annotated_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                cv2.putText(annotated_img, str(i + 1), (x, y - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            annotated_filename = f"{session_id}_annotated.png"
+            annotated_path = ASSETS_DIR / annotated_filename
+            cv2.imwrite(str(annotated_path), annotated_img)
+            return {"annotated_image": annotated_filename}
+        except Exception as e:
+            traceback.print_exc()
+            raise HTTPException(status_code=500, detail="Face detection error: " + str(e))
+        
+    @app.post("/faceshape-detector")
+    async def faceshape_detector(file: UploadFile = File(...)):
+        """
+        Proxy API for detecting face shape.
+        """
+        try:
+            # Validate file extension
+            if not file.filename.lower().endswith((".jpg", ".jpeg", ".png")):
+                raise HTTPException(
+                    status_code=400, detail="Invalid file format. Please upload a JPG or PNG image."
+                )
+
+            # Read file content
+            content = await file.read()
+
+            # Validate file size
+            if len(content) > MAX_FILE_SIZE:
+                raise HTTPException(
+                    status_code=400, detail="File size exceeds the maximum limit of 10MB."
+                )
+
+            # Generate a unique file path
+            session_id = str(uuid4())
+            input_path = ASSETS_DIR / f"{session_id}_input.png"
+            output_filename = f"{session_id}_output.png"
+            output_path = ASSETS_DIR / output_filename
+
+            # Save the uploaded file
+            with open(input_path, "wb") as f:
+                f.write(content)
+
+            # Perform face shape detection (assuming detect_faceshape is defined elsewhere)
+            detected_shape = await detect_faceshape(input_path, output_path)
+
+            if detected_shape:
+                return {
+                    "message": f"{detected_shape['shape']}",
+                    "shape": detected_shape["shape"],
+                    "output_file": f"{output_filename}"
+                }
+            else:
+                raise HTTPException(
+                    status_code=500, detail="Error detecting face shape. Please try again."
+                )
+        except Exception as e:
+            traceback.print_exc()
+            raise HTTPException(status_code=500, detail=f"Error detecting face shape: {str(e)}")
+
 
     return app
 
