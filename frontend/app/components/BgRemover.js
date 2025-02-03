@@ -1,56 +1,63 @@
-import { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { Upload, ArrowRight, RefreshCcw } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Button } from "../components/ui/button";
 import axios from 'axios';
 import Layout from './Layout';
 
 const BgRemover = () => {
+  const [step, setStep] = useState(1);
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [outputImage, setOutputImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [dragActive, setDragActive] = useState(false);
   const [message, setMessage] = useState('Upload an image to remove its background');
 
   const fileInputRef = useRef(null);
 
+  const validateFile = (file) => {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const maxSize = 10 * 1024 * 1024;
+    if (!validTypes.includes(file.type)) {
+      throw new Error('Please upload a valid JPG or PNG image.');
+    }
+    if (file.size > maxSize) {
+      throw new Error('File size must be less than 10MB.');
+    }
+  };
+
   const handleImageUpload = useCallback((e) => {
-    const file = e.target.files ? e.target.files[0] : e.dataTransfer.files[0];
-    if (file) {
-      const validExtensions = ['.jpg', '.jpeg', '.png'];
-      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-
-      if (!file.type.startsWith('image/') || !validExtensions.includes(fileExtension)) {
-        setError('Please upload a valid JPG or PNG image.');
-        return;
-      }
-
-      if (file.size > 10 * 1024 * 1024) {
-        setError('File size must be less than 10MB.');
-        return;
-      }
-
+    const file = e.target.files?.[0] || e.dataTransfer?.files?.[0];
+    if (!file) return;
+    try {
+      validateFile(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
       setImage(file);
-      setOutputImage(null);
       setError('');
       setMessage('Click "Remove Background" to process');
+      setOutputImage(null);
+      setStep(1);
+    } catch (err) {
+      setError(err.message);
+      setImage(null);
+      setPreview(null);
     }
   }, []);
 
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(e.type === 'dragenter' || e.type === 'dragover');
-  };
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const runInference = useCallback(async () => {
+  const removeBackground = async () => {
     if (!image) return;
-
     setLoading(true);
     setError('');
     setMessage('Processing your image...');
+    setStep(2);
 
     const formData = new FormData();
     formData.append('file', image);
@@ -60,121 +67,92 @@ const BgRemover = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
         timeout: 30000,
       });
-      const outputFile = response.data.output_file;
-      setOutputImage(`/api/assets?filename=${outputFile}`);
+      setOutputImage(`/api/assets?filename=${response.data.output_file}`);
       setMessage('Background removed! You can download the result.');
+      setStep(3);
     } catch (err) {
       setError('Failed to process image. Please try again.');
-      setMessage('An error occurred. Please try again.');
-      console.error('Error during inference:', err);
+      console.error('Error during processing:', err);
     } finally {
       setLoading(false);
     }
-  }, [image]);
+  };
+
+  const resetAll = () => {
+    setImage(null);
+    setPreview(null);
+    setOutputImage(null);
+    setError('');
+    setMessage('Upload an image to remove its background');
+    setStep(1);
+  };
 
   return (
-    <div>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 ">
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-6xl w-full">
-          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Background Remover</h1>
-
-          <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Original Image Upload */}
-            <div className="flex flex-col">
-              <h3 className="text-sm font-semibold mb-2 text-center">Original Image</h3>
-              <div
-                className={`border-2 ${
-                  dragActive ? 'border-blue-500' : 'border-gray-300'
-                } border-dashed rounded-lg p-4 aspect-square flex items-center justify-center mb-2`}
-                onDragEnter={handleDrag}
-                onDragOver={handleDrag}
-                onDragLeave={handleDrag}
-                onDrop={(e) => {
-                  handleDrag(e);
-                  handleImageUpload(e);
-                }}
-              >
-                {image ? (
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt="Original"
-                    className="w-full h-full object-contain rounded-md"
-                    onLoad={(e) => URL.revokeObjectURL(e.target.src)}
-                  />
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleButtonClick}
-                    className="text-blue-600 text-sm hover:text-blue-800"
-                  >
-                    Upload Image
-                  </button>
-                )}
+    <Layout>
+      <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8 flex justify-between items-center">
+          {['Upload Image', 'Processing', 'Result'].map((text, index) => (
+            <div key={index} className="flex items-center">
+              <div className={
+                `w-8 h-8 rounded-full flex items-center justify-center ${step > index + 1 ? 'bg-green-500' : step === index + 1 ? 'bg-blue-500' : 'bg-gray-300'} text-white font-medium`
+              }>
+                {index + 1}
               </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".jpg,.jpeg,.png"
-                className="hidden"
-                onChange={handleImageUpload}
-              />
+              <span className="ml-2 text-sm hidden sm:block">{text}</span>
+              {index < 2 && <ArrowRight className="mx-4 text-gray-400 hidden sm:block" size={16} />}
             </div>
-
-            {/* Result */}
-            <div className="flex flex-col">
-              <h3 className="text-sm font-semibold mb-2 text-center">Result</h3>
-              <div className="border-2 border-gray-300 border-dashed rounded-lg p-4 aspect-square flex items-center justify-center mb-2">
-                {outputImage ? (
-                  <img
-                    src={outputImage}
-                    alt="Result"
-                    className="w-full h-full object-contain rounded-md"
-                  />
-                ) : (
-                  <span className="text-gray-400 text-sm text-center">
-                    Result will appear here
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Message and Error Display */}
-          <div className="mb-4 text-center">
-            {error ? (
-              <p className="text-red-600 text-sm">{error}</p>
-            ) : (
-              <p className="text-gray-600 text-sm">{message}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={runInference}
-              disabled={loading || !image}
-              className={`flex-1 py-2 sm:py-3 text-white font-semibold rounded-lg transition ${
-                loading || !image
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700'
-              }`}
-            >
-              {loading ? 'Processing...' : 'Remove Background'}
-            </button>
-
-            {outputImage && (
-              <a
-                href={outputImage}
-                download
-                className="flex-1 py-2 sm:py-3 text-white font-semibold rounded-lg bg-green-600 hover:bg-green-700 transition text-center"
-              >
-                Download Result
-              </a>
-            )}
-          </div>
+          ))}
         </div>
+
+        {step === 1 && (
+          <DropZone title="Upload Image" file={image} onUpload={handleImageUpload} inputRef={fileInputRef} />
+        )}
+
+        {step === 1 && image && (
+          <div className="flex justify-center">
+            <Button onClick={removeBackground} disabled={loading} className="flex-1">
+              {loading ? 'Processing...' : 'Remove Background'}
+            </Button>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              {outputImage && <img src={outputImage} alt="Processed Output" className="rounded-lg shadow-md max-h-64" />}
+            </div>
+            <div className="flex justify-center">
+              <Button onClick={resetAll} className="flex-1">
+                <RefreshCcw className="mr-2" size={16} /> Reset
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {error && <div className="p-4 bg-red-100 border border-red-200 text-red-700 rounded-md">{error}</div>}
+        {message && !error && <div className="p-4 bg-gray-100 rounded-md">{message}</div>}
       </div>
     </div>
+    </Layout>
   );
 };
+
+const DropZone = ({ title, file, onUpload, inputRef }) => (
+  <div className="relative border-2 rounded-lg p-8 border-gray-300 transition-colors duration-200">
+    <div className="flex flex-col items-center">
+      {file ? (
+        <img src={URL.createObjectURL(file)} alt="Preview" className="max-h-64 rounded-lg shadow-md" onLoad={(e) => URL.revokeObjectURL(e.target.src)} />
+      ) : (
+        <>
+          <Upload className="w-12 h-12 text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium mb-2">{title}</h3>
+          <Button onClick={() => inputRef.current?.click()}>Choose File</Button>
+        </>
+      )}
+      <input ref={inputRef} type="file" accept=".jpg,.jpeg,.png" className="hidden" onChange={onUpload} />
+    </div>
+  </div>
+);
 
 export default BgRemover;

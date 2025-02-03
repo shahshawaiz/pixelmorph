@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
+import Layout from './Layout';
 
 const FaceShapeDetector = () => {
   // Step management:
@@ -132,16 +133,9 @@ const FaceShapeDetector = () => {
   }, [preview]);
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
-      <CardHeader>
-        <CardTitle>Face Shape Detector</CardTitle>
-        <CardDescription>
-          Upload an image to detect your face shape.
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="space-y-6">
-        {/* Progress Steps */}
+    <Layout>
+      <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <div className="flex justify-between items-center">
             {['Upload Image', 'Process', 'Result'].map((text, index) => (
@@ -227,8 +221,9 @@ const FaceShapeDetector = () => {
             {message}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
+    </Layout>
   );
 };
 

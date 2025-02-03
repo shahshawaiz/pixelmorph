@@ -52,7 +52,23 @@ const Layout = ({ children }) => {
                   >
                     Faceswap
                   </a>
-                </Link>                
+                </Link>  
+                <Link href="/multifaceswap" legacyBehavior>
+                  <a
+                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
+                    aria-label="Go to Face Swapper"
+                  >
+                    Multi-Faceswap
+                  </a>
+                </Link>  
+                <Link href="/faceshape-detector" legacyBehavior>
+                  <a
+                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
+                    aria-label="Go to Face Swapper"
+                  >
+                    Face Shape Detector
+                  </a>
+                </Link>                                                
                 <Link href="/the-wall" legacyBehavior>
                   <a
                     className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
