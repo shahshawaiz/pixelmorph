@@ -1,0 +1,739 @@
+{
+  "kind": "singleType",
+  "collectionName": "faceswap",
+  "info": {
+    "singularName": "faceswap",
+    "pluralName": "faceswaps",
+    "displayName": "Faceswap"
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "seoTitle": {
+      "type": "string",
+      "description": "SEO Title (e.g. 'AI Face Swap Online for Photos | Free Face Swapper')",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "metaDescription": {
+      "type": "text",
+      "description": "Meta description content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "keywords": {
+      "type": "string",
+      "description": "SEO keywords",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "header": {
+      "type": "string",
+      "description": "Header text (if any)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "structureBreadcrumblistName": {
+      "type": "string",
+      "description": "Breadcrumb list name (same as SEO Title)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "structureBreadcrumblistItem": {
+      "type": "string",
+      "description": "Page URL for breadcrumb list item",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "structureWebsiteName": {
+      "type": "string",
+      "description": "Website name (same as SEO Title)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "structureWebsiteUrl": {
+      "type": "string",
+      "description": "Page URL for website",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "structureWebsiteHeadline": {
+      "type": "string",
+      "description": "Website headline (same as SEO Title)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "structureWebsiteDescription": {
+      "type": "text",
+      "description": "Website description (same as Meta description)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "structureWebsiteImage": {
+      "type": "string",
+      "description": "Preview image URL for website",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ogTitle": {
+      "type": "string",
+      "description": "Open Graph title (same as SEO Title)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ogDescription": {
+      "type": "text",
+      "description": "Open Graph description (same as Meta description)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ogUrl": {
+      "type": "string",
+      "description": "OG URL (should be same as page URL)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ogImgAlt": {
+      "type": "string",
+      "description": "Image alt text for OG image",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "previewImageUrl": {
+      "type": "string",
+      "description": "Preview image URL (used for OG image and twitter image)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "twitterTitle": {
+      "type": "string",
+      "description": "Twitter title (same as SEO Title)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "twitterDescription": {
+      "type": "text",
+      "description": "Twitter description (same as Meta description)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "imageAlt": {
+      "type": "string",
+      "description": "General image alt text (e.g. starting text for image alt plus numerical sequence)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "introH1": {
+      "type": "string",
+      "description": "Intro headline (H1)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "introContent": {
+      "type": "text",
+      "description": "Intro content paragraph",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatH2": {
+      "type": "string",
+      "description": "Section heading for WHAT",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatH3_1": {
+      "type": "string",
+      "description": "WHAT – Subheading 1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatContent1": {
+      "type": "text",
+      "description": "WHAT – Content for subheading 1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatH3_2": {
+      "type": "string",
+      "description": "WHAT – Subheading 2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatContent2": {
+      "type": "text",
+      "description": "WHAT – Content for subheading 2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatH3_3": {
+      "type": "string",
+      "description": "WHAT – Subheading 3",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatContent3": {
+      "type": "text",
+      "description": "WHAT – Content for subheading 3",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatH3_4": {
+      "type": "string",
+      "description": "WHAT – Subheading 4",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whatContent4": {
+      "type": "text",
+      "description": "WHAT – Content for subheading 4",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyH2": {
+      "type": "string",
+      "description": "Section heading for WHY",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyContent1": {
+      "type": "text",
+      "description": "WHY – Intro content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyH3_1": {
+      "type": "string",
+      "description": "WHY – Subheading 1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyContent2": {
+      "type": "text",
+      "description": "WHY – Content for subheading 1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyH3_2": {
+      "type": "string",
+      "description": "WHY – Subheading 2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyContent3": {
+      "type": "text",
+      "description": "WHY – Content for subheading 2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyH3_3": {
+      "type": "string",
+      "description": "WHY – Subheading 3",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyContent4": {
+      "type": "text",
+      "description": "WHY – Content for subheading 3",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyH3_4": {
+      "type": "string",
+      "description": "WHY – Subheading 4",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "whyContent5": {
+      "type": "text",
+      "description": "WHY – Content for subheading 4",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "howH2": {
+      "type": "string",
+      "description": "Section heading for HOW-TO",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "howTitle1": {
+      "type": "string",
+      "description": "HOW-TO – Step 1 title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "howContent1": {
+      "type": "text",
+      "description": "HOW-TO – Step 1 content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "howTitle2": {
+      "type": "string",
+      "description": "HOW-TO – Step 2 title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "howContent2": {
+      "type": "text",
+      "description": "HOW-TO – Step 2 content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "howTitle3": {
+      "type": "string",
+      "description": "HOW-TO – Step 3 title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "howContent3": {
+      "type": "text",
+      "description": "HOW-TO – Step 3 content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "toolsH2": {
+      "type": "string",
+      "description": "Heading for ALL TOOLS section",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "toolsH3_1": {
+      "type": "string",
+      "description": "ALL TOOLS – Subheading",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "toolsContent1": {
+      "type": "text",
+      "description": "ALL TOOLS – Content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReviewH2": {
+      "type": "string",
+      "description": "User Reviews section heading (e.g. a reviewer’s name)",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReviewName1": {
+      "type": "text",
+      "description": "User Review – Reviewer 1 name and quote title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReview1": {
+      "type": "text",
+      "description": "User Review – Reviewer 1 content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReviewName2": {
+      "type": "text",
+      "description": "User Review – Reviewer 2 name and quote title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReview2": {
+      "type": "text",
+      "description": "User Review – Reviewer 2 content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReviewName3": {
+      "type": "text",
+      "description": "User Review – Reviewer 3 name and quote title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReview3": {
+      "type": "text",
+      "description": "User Review – Reviewer 3 content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReviewName4": {
+      "type": "text",
+      "description": "User Review – Reviewer 4 name and quote title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "userReview4": {
+      "type": "text",
+      "description": "User Review – Reviewer 4 content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqHeader": {
+      "type": "string",
+      "description": "FAQ section header",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion1": {
+      "type": "string",
+      "description": "FAQ Q1: What is a Face Swap?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer1": {
+      "type": "text",
+      "description": "FAQ A1 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion2": {
+      "type": "string",
+      "description": "FAQ Q2: How to swap a face in a picture?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer2": {
+      "type": "text",
+      "description": "FAQ A2 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion3": {
+      "type": "string",
+      "description": "FAQ Q3: Can I swap faces for any photo?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer3": {
+      "type": "text",
+      "description": "FAQ A3 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion4": {
+      "type": "string",
+      "description": "FAQ Q4: Is face swap legal?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer4": {
+      "type": "text",
+      "description": "FAQ A4 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion5": {
+      "type": "string",
+      "description": "FAQ Q5: Is face swapper online safe?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer5": {
+      "type": "text",
+      "description": "FAQ A5 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion6": {
+      "type": "string",
+      "description": "FAQ Q6: Can I swap faces between animals and humans?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer6": {
+      "type": "text",
+      "description": "FAQ A6 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion7": {
+      "type": "string",
+      "description": "FAQ Q7: Does AI FaceSwap Support Gender Swap?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer7": {
+      "type": "text",
+      "description": "FAQ A7 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion8": {
+      "type": "string",
+      "description": "FAQ Q8: How to achieve the best results?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer8": {
+      "type": "text",
+      "description": "FAQ A8 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion9": {
+      "type": "string",
+      "description": "FAQ Q9: How does AI face swapper work?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer9": {
+      "type": "text",
+      "description": "FAQ A9 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqQuestion10": {
+      "type": "string",
+      "description": "FAQ Q10: What type of file format does this tool support?",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faqAnswer10": {
+      "type": "text",
+      "description": "FAQ A10 answer content",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

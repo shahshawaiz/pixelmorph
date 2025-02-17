@@ -1,26 +1,29 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Layout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
+  const { locale, locales, asPath } = router;
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen((prev) => !prev);
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-black text-white">
       {/* Sidebar */}
       <aside
-        className={`fixed z-20 inset-y-0 left-0 transform ${
+        className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 bg-black shadow-xl overflow-y-auto ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 bg-white w-60 shadow-md lg:translate-x-0`}
+        }`}
       >
         <div className="flex flex-col h-full justify-between">
           {/* Logo and Navigation */}
           <div>
-            <div className="p-6">
-              <div className="flex items-center mb-6">
+            <div className="p-6 border-b border-gray-800">
+              <div className="flex items-center mb-4">
                 <img
                   src="/logo.png"
                   alt="PixelMorph"
@@ -28,88 +31,97 @@ const Layout = ({ children }) => {
                   style={{ maxHeight: '80px' }}
                 />
               </div>
-              <nav className="space-y-4">
-                <Link href="/" legacyBehavior>
-                  <a
-                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
-                    aria-label="Go to Home Page"
-                  >
-                    Home
-                  </a>
+              <nav className="space-y-2">
+                <Link
+                  href="/"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  Home
                 </Link>
-                <Link href="/background-remover" legacyBehavior>
-                  <a
-                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
-                    aria-label="Go to Background Remover"
-                  >
-                    Background Remover
-                  </a>
+                <Link
+                  href="/faceswap"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  Faceswap
                 </Link>
-                <Link href="/faceswap" legacyBehavior>
-                  <a
-                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
-                    aria-label="Go to Face Swapper"
-                  >
-                    Faceswap
-                  </a>
-                </Link>  
-                <Link href="/multifaceswap" legacyBehavior>
-                  <a
-                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
-                    aria-label="Go to Face Swapper"
-                  >
-                    Multi-Faceswap
-                  </a>
-                </Link>  
-                <Link href="/faceshape-detector" legacyBehavior>
-                  <a
-                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
-                    aria-label="Go to Face Swapper"
-                  >
-                    Face Shape Detector
-                  </a>
-                </Link>                                                
-                <Link href="/the-wall" legacyBehavior>
-                  <a
-                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
-                    aria-label="Go to Watermark Remover"
-                  >
-                    The Wall
-                  </a>
-                </Link>                                
-                <Link href="/about" legacyBehavior>
-                  <a
-                    className="block px-4 py-2 rounded hover:bg-blue-100 hover:text-blue-800 focus:bg-blue-100 focus:text-blue-800 focus:outline-none transition-all duration-300"
-                    aria-label="Learn About Us"
-                  >
-                    About
-                  </a>
+                <Link
+                  href="/background-remover"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  Background Remover
+                </Link>
+                <Link
+                  href="/multifaceswap"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  Multi-Faceswap
+                </Link>
+                <Link
+                  href="/faceshape-detector"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  Face Shape Detector
+                </Link>
+                <Link
+                  href="/the-wall"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  The Wall
+                </Link>
+                <Link
+                  href="/about"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  About
                 </Link>
               </nav>
             </div>
+            {/* Language Switcher */}
+            <div className="p-6 border-t border-gray-800">
+              <div className="text-gray-500 text-sm mb-2 text-center">Language</div>
+              <div className="flex justify-center space-x-2">
+                {locales.map((loc) => (
+                  <Link
+                    key={loc}
+                    href={asPath}
+                    locale={loc}
+                    className={`px-3 py-1 rounded-full border border-gray-700 transition-colors ${
+                      locale === loc
+                        ? 'bg-cyan-600 text-white'
+                        : 'bg-gray-800 text-gray-400 hover:bg-cyan-700 hover:text-white'
+                    }`}
+                  >
+                    {loc.toUpperCase()}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
-
           {/* Footer */}
-          <div className="p-6 text-sm text-center text-gray-500">
+          <div className="p-6 text-xs text-center text-gray-500 border-t border-gray-800">
             &copy; {new Date().getFullYear()} PixelMorph
           </div>
         </div>
       </aside>
 
-      {/* Overlay for Mobile Sidebar */}
+      {/* Overlay for Sidebar on Mobile */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
           onClick={toggleSidebar}
         />
       )}
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 lg:ml-60">
+      <div
+        className={`flex flex-col flex-1 transition-all duration-300 ${
+          isSidebarOpen ? 'ml-64' : 'ml-0'
+        }`}
+      >
         {/* Header */}
-        <header className="bg-white shadow p-4 flex items-center justify-between lg:hidden">
+        <header className="bg-black shadow p-4 flex items-center justify-between">
           <button
-            className="text-gray-700 focus:outline-none"
+            className="text-white focus:outline-none"
             onClick={toggleSidebar}
             aria-label="Toggle Sidebar"
           >
@@ -124,7 +136,7 @@ const Layout = ({ children }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
+                d="M4 6h16M4 12h16M4 18h16"
               ></path>
             </svg>
           </button>
@@ -132,7 +144,7 @@ const Layout = ({ children }) => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 bg-white shadow-lg m-6 rounded-lg overflow-auto">
+        <main className="flex-1 p-6 bg-black overflow-auto">
           <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>

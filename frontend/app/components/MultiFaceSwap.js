@@ -88,7 +88,7 @@ const MultiFaceSwap = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="min-h-screen bg-black py-8 px-4 text-white">
         <div className="max-w-4xl mx-auto">
           {/* Progress Steps */}
           <div className="mb-8">
@@ -102,28 +102,27 @@ const MultiFaceSwap = () => {
                 <div key={index} className="flex items-center">
                   <div className={`
                     w-8 h-8 rounded-full flex items-center justify-center
-                    ${step > index + 1 ? 'bg-green-500' : step === index + 1 ? 'bg-blue-500' : 'bg-gray-300'}
+                    ${step > index + 1 ? 'bg-cyan-600' : step === index + 1 ? 'bg-cyan-600' : 'bg-gray-800'}
                     text-white font-medium
                   `}>
                     {index + 1}
                   </div>
                   <span className="ml-2 text-sm hidden sm:block">{text}</span>
                   {index < 3 && (
-                    <ArrowRight className="mx-4 text-gray-400 hidden sm:block" size={16} />
+                    <ArrowRight className="mx-4 text-gray-500 hidden sm:block" size={16} />
                   )}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-          {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md mb-4">
+          {/* Main Content Card */}
+          <div className="bg-black rounded-xl shadow-lg p-6 border border-gray-800">
+            {error && (
+              <div className="bg-red-900 border border-red-800 text-red-200 px-4 py-2 rounded-md mb-4">
                 {error}
               </div>
             )}
-
 
             <div className="space-y-8">
               {/* Step 1: Upload Group Photo */}
@@ -151,12 +150,12 @@ const MultiFaceSwap = () => {
                       value={faceNumber}
                       onChange={(e) => setFaceNumber(e.target.value)}
                       placeholder="Enter face number"
-                      className="w-32 px-3 py-2 border rounded-md"
+                      className="w-32 px-3 py-2 border border-gray-800 rounded-md bg-black text-white"
                       min="1"
                     />
                     <button
                       onClick={() => faceNumber && setStep(3)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                     >
                       Continue
                     </button>
@@ -186,7 +185,7 @@ const MultiFaceSwap = () => {
                   <div className="flex justify-center">
                     <button
                       onClick={resetAll}
-                      className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                      className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                     >
                       <RefreshCcw className="mr-2" size={16} />
                       Start New Face Swap
@@ -196,13 +195,13 @@ const MultiFaceSwap = () => {
               )}
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Button for Step 3 */}
             {step === 3 && replacementFile && (
               <div className="mt-6 flex justify-center">
                 <button
                   onClick={handleSwap}
                   disabled={loading}
-                  className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition disabled:bg-gray-400"
+                  className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:bg-gray-600"
                 >
                   {loading ? 'Processing...' : 'Swap Face'}
                 </button>
@@ -215,9 +214,9 @@ const MultiFaceSwap = () => {
       {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 flex flex-col items-center">
-            <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-4 text-gray-700">{message}</p>
+          <div className="bg-black rounded-lg p-6 flex flex-col items-center border border-gray-800">
+            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="mt-4 text-gray-400">{message}</p>
           </div>
         </div>
       )}
@@ -250,7 +249,7 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef }) => {
     <div
       className={`
         border-2 border-dashed rounded-lg p-8
-        ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}
+        ${isDragging ? 'border-blue-500 bg-blue-900' : 'border-gray-800 bg-black'}
         transition-colors duration-200
       `}
       onDragEnter={handleDrag}
@@ -269,11 +268,11 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef }) => {
         ) : (
           <>
             <Upload className="w-12 h-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium mb-2">{title}</h3>
+            <h3 className="text-lg font-medium mb-2 text-white">{title}</h3>
             <p className="text-sm text-gray-500 mb-4">{subtitle}</p>
             <button
               onClick={() => inputRef.current?.click()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
             >
               Choose File
             </button>

@@ -134,95 +134,96 @@ const FaceShapeDetector = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <div className="flex justify-between items-center">
-            {['Upload Image', 'Process', 'Result'].map((text, index) => (
-              <div key={index} className="flex items-center">
-                <div
-                  className={`
-                    w-8 h-8 rounded-full flex items-center justify-center
-                    ${step > index + 1 ? 'bg-green-500' : step === index + 1 ? 'bg-blue-500' : 'bg-gray-300'}
-                    text-white font-medium
-                  `}
-                >
-                  {index + 1}
+      <div className="min-h-screen bg-black py-8 px-4 text-white">
+        <div className="max-w-4xl mx-auto">
+          {/* Progress Steps */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center">
+              {['Upload Image', 'Process', 'Result'].map((text, index) => (
+                <div key={index} className="flex items-center">
+                  <div
+                    className={`
+                      w-8 h-8 rounded-full flex items-center justify-center
+                      ${step > index + 1 ? 'bg-cyan-600' : step === index + 1 ? 'bg-cyan-600' : 'bg-gray-800'}
+                      text-white font-medium
+                    `}
+                  >
+                    {index + 1}
+                  </div>
+                  <span className="ml-2 text-sm hidden sm:block">{text}</span>
+                  {index < 2 && (
+                    <ArrowRight className="mx-4 text-gray-500 hidden sm:block" size={16} />
+                  )}
                 </div>
-                <span className="ml-2 text-sm hidden sm:block">{text}</span>
-                {index < 2 && (
-                  <ArrowRight className="mx-4 text-gray-400 hidden sm:block" size={16} />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        {step === 1 && (
-          <DropZone
-            title="Upload Image"
-            subtitle="Drag and drop an image here, or click to select. Supports JPG, JPEG, PNG (max 10MB)."
-            file={image}
-            onUpload={handleImageUpload}
-            inputRef={fileInputRef}
-            dragActive={dragActive}
-            handleDrag={handleDrag}
-            handleDrop={handleDrop}
-          />
-        )}
-
-        {step === 1 && image && (
-          <div className="flex justify-center">
-            <Button onClick={detectFaceShape} disabled={loading} className="flex-1">
-              {loading ? 'Detecting...' : 'Detect Face Shape'}
-            </Button>
-          </div>
-        )}
-
-        {step === 3 && (
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              {outputFile ? (
-                <img
-                  src={outputFile}
-                  alt="Processed Output"
-                  className="rounded-lg shadow-md max-h-64"
-                />
-              ) : (
-                <img
-                  src={preview}
-                  alt="Uploaded"
-                  className="rounded-lg shadow-md max-h-64"
-                />
-              )}
+              ))}
             </div>
-            <div className="text-center">
-              <h3 className="text-xl font-semibold">Detected Face Shape:</h3>
-              <p className="text-2xl font-bold text-green-700">{detectedShape}</p>
-            </div>
-            <div className="flex justify-center">
-              <Button onClick={resetAll} className="flex-1">
-                <RefreshCcw className="mr-2" size={16} />
-                Reset
+          </div>
+
+          {/* Main Content */}
+          {step === 1 && (
+            <DropZone
+              title="Upload Image"
+              subtitle="Drag and drop an image here, or click to select. Supports JPG, JPEG, PNG (max 10MB)."
+              file={image}
+              onUpload={handleImageUpload}
+              inputRef={fileInputRef}
+              dragActive={dragActive}
+              handleDrag={handleDrag}
+              handleDrop={handleDrop}
+            />
+          )}
+
+          {step === 1 && image && (
+            <div className="flex justify-center mt-4">
+              <Button onClick={detectFaceShape} disabled={loading} className="flex-1">
+                {loading ? 'Detecting...' : 'Detect Face Shape'}
               </Button>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Display messages and errors */}
-        {error && (
-          <div className="p-4 bg-red-100 border border-red-200 text-red-700 rounded-md">
-            {error}
-          </div>
-        )}
-        {message && !error && (
-          <div className="p-4 bg-gray-100 rounded-md">
-            {message}
-          </div>
-        )}
+          {step === 3 && (
+            <div className="space-y-4">
+              <div className="flex justify-center">
+                {outputFile ? (
+                  <img
+                    src={outputFile}
+                    alt="Processed Output"
+                    className="rounded-lg shadow-md max-h-64"
+                  />
+                ) : (
+                  <img
+                    src={preview}
+                    alt="Uploaded"
+                    className="rounded-lg shadow-md max-h-64"
+                  />
+                )}
+              </div>
+              <div className="text-center">
+                <h3 className="text-xl font-semibold">Detected Face Shape:</h3>
+                <p className="text-2xl font-bold text-cyan-600">{detectedShape}</p>
+              </div>
+              <div className="flex justify-center">
+                <Button onClick={resetAll} className="flex-1">
+                  <RefreshCcw className="mr-2" size={16} />
+                  Reset
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Display messages and errors */}
+          {error && (
+            <div className="p-4 bg-red-900 border border-red-800 text-red-200 rounded-md">
+              {error}
+            </div>
+          )}
+          {message && !error && (
+            <div className="p-4 bg-gray-800 rounded-md text-gray-400">
+              {message}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </Layout>
   );
 };
@@ -232,7 +233,7 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef, dragActive, handl
     <div
       className={`
         relative border-2 rounded-lg p-8
-        ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}
+        ${dragActive ? 'border-blue-500 bg-blue-900' : 'border-gray-800 bg-black'}
         transition-colors duration-200
       `}
       onDragEnter={handleDrag}
@@ -251,7 +252,7 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef, dragActive, handl
         ) : (
           <>
             <Upload className="w-12 h-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium mb-2">{title}</h3>
+            <h3 className="text-lg font-medium mb-2 text-white">{title}</h3>
             <p className="text-sm text-gray-500 mb-4">{subtitle}</p>
             <Button onClick={() => inputRef.current?.click()}>
               Choose File

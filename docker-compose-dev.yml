@@ -35,6 +35,25 @@ services:
     networks:
       - webnet  
 
+  cms:
+    container_name: cms
+    hostname: cms
+    build:
+      context: ./cms
+      dockerfile: Dockerfile
+    ports:
+      - "1337:1337"
+    env_file:
+      - ./cms/dev.env  # Path to the .env file
+    volumes:
+      # Mount the Strapi project files (for development live reload)
+      # - ./cms/app:/srv/app
+      # Persist the database data
+      - ./cms/data:/srv/app/data
+    restart: always
+    networks:
+      - webnet
+
   # ngrok-bgremover:
   #   container_name: ngrok-bgremover
   #   image: ngrok/ngrok:latest

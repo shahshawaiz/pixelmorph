@@ -1,0 +1,339 @@
+{
+    "kind": "singleType",
+    "info": {
+      "singularName": "multi-faceswap",
+      "pluralName": "multi-faceswaps",
+      "displayName": "Multi Faceswap"
+    },
+    "pluginOptions": {
+        "i18n": {
+            "localized": true
+        }
+    },    
+    "options": {
+      "draftAndPublish": true
+    },
+    "attributes": {
+      "seoTitle": {
+        "type": "string",
+        "description": "SEO Title for Multi Faceswap"
+      },
+      "metaDescription": {
+        "type": "text",
+        "description": "Meta description content"
+      },
+      "keywords": {
+        "type": "string",
+        "description": "SEO keywords"
+      },
+      "header": {
+        "type": "string",
+        "description": "Header text (if any)"
+      },
+      "structureBreadcrumblistName": {
+        "type": "string",
+        "description": "Breadcrumb list name (same as SEO Title)"
+      },
+      "structureBreadcrumblistItem": {
+        "type": "string",
+        "description": "Page URL for breadcrumb list item"
+      },
+      "structureWebsiteName": {
+        "type": "string",
+        "description": "Website name (same as SEO Title)"
+      },
+      "structureWebsiteUrl": {
+        "type": "string",
+        "description": "Page URL for website"
+      },
+      "structureWebsiteHeadline": {
+        "type": "string",
+        "description": "Website headline (same as SEO Title)"
+      },
+      "structureWebsiteDescription": {
+        "type": "text",
+        "description": "Website description (same as Meta description)"
+      },
+      "structureWebsiteImage": {
+        "type": "string",
+        "description": "Preview image URL for website"
+      },
+      "ogTitle": {
+        "type": "string",
+        "description": "Open Graph title (same as SEO Title)"
+      },
+      "ogDescription": {
+        "type": "text",
+        "description": "Open Graph description (same as Meta description)"
+      },
+      "ogUrl": {
+        "type": "string",
+        "description": "OG URL (should be same as page URL)"
+      },
+      "ogImgAlt": {
+        "type": "string",
+        "description": "Image alt text for OG image"
+      },
+      "previewImageUrl": {
+        "type": "string",
+        "description": "Preview image URL (used for OG and Twitter images)"
+      },
+      "twitterTitle": {
+        "type": "string",
+        "description": "Twitter title (same as SEO Title)"
+      },
+      "twitterDescription": {
+        "type": "text",
+        "description": "Twitter description (same as Meta description)"
+      },
+      "imageAlt": {
+        "type": "string",
+        "description": "General image alt text"
+      },
+      "introH1": {
+        "type": "string",
+        "description": "Intro headline (H1)"
+      },
+      "introContent": {
+        "type": "text",
+        "description": "Intro content paragraph"
+      },
+      "whatH2": {
+        "type": "string",
+        "description": "Section heading for WHAT"
+      },
+      "whatH3_1": {
+        "type": "string",
+        "description": "WHAT – Subheading 1"
+      },
+      "whatContent1": {
+        "type": "text",
+        "description": "WHAT – Content for subheading 1"
+      },
+      "whatH3_2": {
+        "type": "string",
+        "description": "WHAT – Subheading 2"
+      },
+      "whatContent2": {
+        "type": "text",
+        "description": "WHAT – Content for subheading 2"
+      },
+      "whatH3_3": {
+        "type": "string",
+        "description": "WHAT – Subheading 3"
+      },
+      "whatContent3": {
+        "type": "text",
+        "description": "WHAT – Content for subheading 3"
+      },
+      "whatH3_4": {
+        "type": "string",
+        "description": "WHAT – Subheading 4"
+      },
+      "whatContent4": {
+        "type": "text",
+        "description": "WHAT – Content for subheading 4"
+      },
+      "whyH2": {
+        "type": "string",
+        "description": "Section heading for WHY"
+      },
+      "whyContent1": {
+        "type": "text",
+        "description": "WHY – Intro content"
+      },
+      "whyH3_1": {
+        "type": "string",
+        "description": "WHY – Subheading 1"
+      },
+      "whyContent2": {
+        "type": "text",
+        "description": "WHY – Content for subheading 1"
+      },
+      "whyH3_2": {
+        "type": "string",
+        "description": "WHY – Subheading 2"
+      },
+      "whyContent3": {
+        "type": "text",
+        "description": "WHY – Content for subheading 2"
+      },
+      "whyH3_3": {
+        "type": "string",
+        "description": "WHY – Subheading 3"
+      },
+      "whyContent4": {
+        "type": "text",
+        "description": "WHY – Content for subheading 3"
+      },
+      "whyH3_4": {
+        "type": "string",
+        "description": "WHY – Subheading 4"
+      },
+      "whyContent5": {
+        "type": "text",
+        "description": "WHY – Content for subheading 4"
+      },
+      "howH2": {
+        "type": "string",
+        "description": "Section heading for HOW-TO"
+      },
+      "howTitle1": {
+        "type": "string",
+        "description": "HOW-TO – Step 1 title"
+      },
+      "howContent1": {
+        "type": "text",
+        "description": "HOW-TO – Step 1 content"
+      },
+      "howTitle2": {
+        "type": "string",
+        "description": "HOW-TO – Step 2 title"
+      },
+      "howContent2": {
+        "type": "text",
+        "description": "HOW-TO – Step 2 content"
+      },
+      "howTitle3": {
+        "type": "string",
+        "description": "HOW-TO – Step 3 title"
+      },
+      "howContent3": {
+        "type": "text",
+        "description": "HOW-TO – Step 3 content"
+      },
+      "toolsH2": {
+        "type": "string",
+        "description": "Heading for ALL TOOLS section"
+      },
+      "toolsH3_1": {
+        "type": "string",
+        "description": "ALL TOOLS – Subheading"
+      },
+      "toolsContent1": {
+        "type": "text",
+        "description": "ALL TOOLS – Content"
+      },
+      "userReviewH2": {
+        "type": "string",
+        "description": "User Reviews section heading"
+      },
+      "userReviewName1": {
+        "type": "text",
+        "description": "User Review – Reviewer 1 name/quote"
+      },
+      "userReview1": {
+        "type": "text",
+        "description": "User Review – Reviewer 1 content"
+      },
+      "userReviewName2": {
+        "type": "text",
+        "description": "User Review – Reviewer 2 name/quote"
+      },
+      "userReview2": {
+        "type": "text",
+        "description": "User Review – Reviewer 2 content"
+      },
+      "userReviewName3": {
+        "type": "text",
+        "description": "User Review – Reviewer 3 name/quote"
+      },
+      "userReview3": {
+        "type": "text",
+        "description": "User Review – Reviewer 3 content"
+      },
+      "userReviewName4": {
+        "type": "text",
+        "description": "User Review – Reviewer 4 name/quote"
+      },
+      "userReview4": {
+        "type": "text",
+        "description": "User Review – Reviewer 4 content"
+      },
+      "faqHeader": {
+        "type": "string",
+        "description": "FAQ section header"
+      },
+      "faqQuestion1": {
+        "type": "string",
+        "description": "FAQ Q1: What is a Face Swap?"
+      },
+      "faqAnswer1": {
+        "type": "text",
+        "description": "FAQ A1 answer content"
+      },
+      "faqQuestion2": {
+        "type": "string",
+        "description": "FAQ Q2: How to swap a face in a picture?"
+      },
+      "faqAnswer2": {
+        "type": "text",
+        "description": "FAQ A2 answer content"
+      },
+      "faqQuestion3": {
+        "type": "string",
+        "description": "FAQ Q3: Can I swap faces for any photo?"
+      },
+      "faqAnswer3": {
+        "type": "text",
+        "description": "FAQ A3 answer content"
+      },
+      "faqQuestion4": {
+        "type": "string",
+        "description": "FAQ Q4: Is face swap legal?"
+      },
+      "faqAnswer4": {
+        "type": "text",
+        "description": "FAQ A4 answer content"
+      },
+      "faqQuestion5": {
+        "type": "string",
+        "description": "FAQ Q5: Is face swapper online safe?"
+      },
+      "faqAnswer5": {
+        "type": "text",
+        "description": "FAQ A5 answer content"
+      },
+      "faqQuestion6": {
+        "type": "string",
+        "description": "FAQ Q6: Can I swap faces between animals and humans?"
+      },
+      "faqAnswer6": {
+        "type": "text",
+        "description": "FAQ A6 answer content"
+      },
+      "faqQuestion7": {
+        "type": "string",
+        "description": "FAQ Q7: Does AI FaceSwap Support Gender Swap?"
+      },
+      "faqAnswer7": {
+        "type": "text",
+        "description": "FAQ A7 answer content"
+      },
+      "faqQuestion8": {
+        "type": "string",
+        "description": "FAQ Q8: How to achieve the best results?"
+      },
+      "faqAnswer8": {
+        "type": "text",
+        "description": "FAQ A8 answer content"
+      },
+      "faqQuestion9": {
+        "type": "string",
+        "description": "FAQ Q9: How does AI face swapper work?"
+      },
+      "faqAnswer9": {
+        "type": "text",
+        "description": "FAQ A9 answer content"
+      },
+      "faqQuestion10": {
+        "type": "string",
+        "description": "FAQ Q10: What type of file format does this tool support?"
+      },
+      "faqAnswer10": {
+        "type": "text",
+        "description": "FAQ A10 answer content"
+      }
+    }
+  }
+  

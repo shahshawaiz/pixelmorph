@@ -4,66 +4,98 @@ import Layout from '../components/Layout';
 export default function Home() {
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto text-center py-8">
-        {/* Hero Section */}
-        <section className="py-12 bg-gradient-to-br from-blue-500 to-indigo-700 text-white rounded-xl shadow-lg">
-          <h1 className="text-5xl font-extrabold mb-6">PixelMorph</h1>
-          <p className="text-lg mb-8 max-w-2xl mx-auto">
-            Fast, simple, and free tools to process your images. Enhance effortlessly.
-          </p>
-          <Link href="/about" legacyBehavior>
-            <a className="px-6 py-3 bg-white text-blue-600 font-medium rounded-lg shadow-md hover:bg-blue-100 transition">
-              Learn More
-            </a>
-          </Link>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-16">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900">Our Tools</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition-transform hover:-translate-y-1">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">Background Remover</h3>
-              <p className="text-gray-700 mb-4">
-                Instantly remove image backgrounds with AI precision.
-              </p>
-              <Link href="/background-remover" legacyBehavior>
-                <a className="text-blue-600 font-medium hover:underline">Try Now →</a>
+      <div className="min-h-screen bg-black text-white">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          {/* Hero Section */}
+          <section className="py-16 bg-gradient-to-br from-black via-gray-900 to-black rounded-lg shadow-2xl border border-gray-800">
+            <h1 className="text-center text-7xl font-extrabold mb-6 drop-shadow-2xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+              PixelMorph
+            </h1>
+            <p className="text-center text-2xl mb-10 max-w-3xl mx-auto text-gray-400">
+              Fast, simple, and free tools to process your images. Enhance effortlessly.
+            </p>
+            <div className="flex justify-center">
+              <Link
+                href="/about"
+                className="px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-md transition-all duration-300 shadow-lg hover:shadow-cyan-600"
+              >
+                Learn More
               </Link>
             </div>
+          </section>
 
-            <div className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition-transform hover:-translate-y-1">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">Faceswap</h3>
-              <p className="text-gray-700 mb-4">
-                Effortlessly faceswap images or videos
-              </p>
-              <Link href="/faceswap" legacyBehavior>
-                <a className="text-blue-600 font-medium hover:underline">Try Now →</a>
-              </Link>
+          {/* Features Section */}
+          <section className="py-16">
+            <h2 className="text-4xl font-bold mb-12 text-center text-white">
+              Our Tools
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Card 1 */}
+              <div className="p-8 bg-gray-900 rounded-lg shadow-lg border border-gray-800 transition transform hover:-translate-y-1 hover:border-cyan-500">
+                <h3 className="text-2xl font-semibold mb-4 text-cyan-400">
+                  Background Remover
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Instantly remove image backgrounds with AI precision.
+                </p>
+                <Link
+                  href="/background-remover"
+                  className="text-cyan-500 font-medium hover:underline"
+                >
+                  Try Now →
+                </Link>
+              </div>
+
+              {/* Card 2 */}
+              <div className="p-8 bg-gray-900 rounded-lg shadow-lg border border-gray-800 transition transform hover:-translate-y-1 hover:border-cyan-500">
+                <h3 className="text-2xl font-semibold mb-4 text-cyan-400">
+                  Faceswap
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Effortlessly faceswap images or videos.
+                </p>
+                <Link
+                  href="/faceswap"
+                  className="text-cyan-500 font-medium hover:underline"
+                >
+                  Try Now →
+                </Link>
+              </div>
+
+              {/* Card 3 */}
+              <div className="p-8 bg-gray-900 rounded-lg shadow-lg border border-gray-800 transition transform hover:-translate-y-1 hover:border-cyan-500">
+                <h3 className="text-2xl font-semibold mb-4 text-cyan-400">
+                  Multi-Faceswap
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Faceswap multiple faces in images or videos.
+                </p>
+                <Link
+                  href="/multifaceswap"
+                  className="text-cyan-500 font-medium hover:underline"
+                >
+                  Try Now →
+                </Link>
+              </div>
+
+              {/* Card 4 */}
+              <div className="p-8 bg-gray-900 rounded-lg shadow-lg border border-gray-800 transition transform hover:-translate-y-1 hover:border-cyan-500">
+                <h3 className="text-2xl font-semibold mb-4 text-cyan-400">
+                  Faceshape Detector
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Detect face shapes effortlessly.
+                </p>
+                <Link
+                  href="/faceshape-detector"
+                  className="text-cyan-500 font-medium hover:underline"
+                >
+                  Try Now →
+                </Link>
+              </div>
             </div>
-
-            <div className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition-transform hover:-translate-y-1">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">Multi-Faceswap</h3>
-              <p className="text-gray-700 mb-4">
-                Faceswap multiple faces in images or videos
-              </p>
-              <Link href="/multifaceswap" legacyBehavior>
-                <a className="text-blue-600 font-medium hover:underline">Try Now →</a>
-              </Link>
-            </div>
-
-
-            <div className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition-transform hover:-translate-y-1">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">Faceshape Detector</h3>
-              <p className="text-gray-700 mb-4">
-                Detect Face shape
-              </p>
-              <Link href="/faceshape-detector" legacyBehavior>
-                <a className="text-blue-600 font-medium hover:underline">Try Now →</a>
-              </Link>
-            </div>            
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </Layout>
   );
