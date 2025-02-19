@@ -1,5 +1,7 @@
 // import type { Core } from '@strapi/strapi';
 import bootstrap from './bootstrap';
+import bootstrap_faceswap from './bootstrap_faceswap';
+import bootstrap_multifaceswap from './bootstrap_multifaceswap';
 
 export default {
   /**
@@ -18,6 +20,13 @@ export default {
    * run jobs, or perform some special logic.
    */
   bootstrap: async ({ strapi }) => {
+    // create admin, enable permissions, and create initial data
     await bootstrap({ strapi });
+
+    // create faceswap data
+    await bootstrap_faceswap({ strapi });
+    
+    // 
+    await bootstrap_multifaceswap({ strapi });
   },
 };

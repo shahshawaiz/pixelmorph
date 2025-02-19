@@ -10,11 +10,9 @@ import Layout from '../components/Layout';
 const LanguageSwitcher = () => {
   const router = useRouter();
   const { locale, locales, asPath } = router;
-
   const handleLocaleChange = (newLocale) => {
     router.push(asPath, asPath, { locale: newLocale });
   };
-
   return (
     <div className="flex space-x-2 mb-4 justify-center">
       {locales.map((loc) => (
@@ -38,13 +36,11 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 // Reusable DropZone component for file uploads.
 const DropZone = ({ title, subtitle, file, onUpload, inputRef }) => {
   const [isDragging, setIsDragging] = useState(false);
-
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(e.type === 'dragenter' || e.type === 'dragover');
   };
-
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -55,7 +51,6 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef }) => {
       onUpload(event);
     }
   };
-
   return (
     <div
       className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 transition-colors duration-200 w-full ${
@@ -97,99 +92,124 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef }) => {
   );
 };
 
+// FAQ item as an accordion component.
+const FaqItem = ({ question, answer }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="bg-black border border-gray-800 rounded-lg p-4">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full text-left focus:outline-none"
+      >
+        <h3 className="text-xl font-semibold text-white">{question}</h3>
+      </button>
+      {open && <p className="mt-2 text-gray-400">{answer}</p>}
+    </div>
+  );
+};
+
 const FaceSwap = () => {
   const router = useRouter();
   const { locale } = router;
+  // Ref for scrolling to the upload section.
+  const uploadSectionRef = useRef(null);
 
   // Fetch localized content via SWR.
-  const { data: apiData } = useSWR(`/api/loadSwr?locale=${locale}`, fetcher);
+  const { data: apiData } = useSWR(`/api/loadSwrFaceswap?locale=${locale}`, fetcher);
   console.log('SWR Data:', apiData);
 
   // Fallback content if API data is not available.
   const fallbackContent = {
-    seoTitle: "AI Face Swap Online for Photos | Free Face Swapper",
-    metaDescription: "Easily swap faces in any photo using our AI-powered tool.",
-    keywords: "Face Swap, AI, Photo Editing, Gender Swap, Online Tool",
-    header: "Free AI Face Swapper",
+    seoTitle: "Free AI Face Swap – Best Face Swapper Online",
+    metaDescription: "Create fun and unique photos with AI Face Swap. Swap faces seamlessly in seconds.",
+    keywords: "Face Swap, AI, Photo Editing, Online Tool",
     structureBreadcrumblistName: "Face Swap Home",
-    structureBreadcrumblistItem: "https://example.com/faceswap",
+    structureBreadcrumblistItem: "/faceswap",
     structureWebsiteName: "Face Swap AI",
-    structureWebsiteUrl: "https://example.com",
+    structureWebsiteUrl: "https://mydomain.com",
     structureWebsiteHeadline: "AI Face Swap Online",
     structureWebsiteDescription: "Swap faces instantly using advanced AI algorithms.",
-    structureWebsiteImage: "https://example.com/images/hero.png",
+    structureWebsiteImage: "/images/faceswap/IMAGE 1.webp",
     ogTitle: "AI Face Swap - Instantly Swap Faces",
     ogDescription: "Use our free online tool to swap faces in your photos.",
-    ogUrl: "https://example.com/faceswap",
+    ogUrl: "https://mydomain.com/faceswap",
     ogImgAlt: "Face Swap Preview",
-    previewImageUrl: "https://example.com/images/preview.png",
+    previewImageUrl: "/images/faceswap/IMAGE 1.webp",
     twitterTitle: "AI Face Swap",
     twitterDescription: "Easily swap faces online with AI.",
-    imageAlt: "A sample image showing before and after face swap.",
+    imageAlt: "Before and after face swap preview",
+
+    header: "Free AI Face Swapper",
     introH1: "AI Face Swap",
     introContent: "Seamlessly swap faces with our powerful AI-based technology.",
-    whatH2: "What Is Face Swap?",
-    whatH3_1: "Introduction",
-    whatContent1: "Face Swap is an AI tool that allows you to exchange faces in photos.",
-    whatH3_2: "How It Works",
-    whatContent2: "We use neural networks to detect and map facial features.",
-    whatH3_3: "Supported Formats",
-    whatContent3: "JPG, PNG, and WEBP are supported.",
-    whatH3_4: "Instant Results",
-    whatContent4: "See your swapped image in seconds.",
-    whyH2: "Why Use Our Face Swap?",
-    whyContent1: "Our tool offers unmatched accuracy and speed.",
-    whyH3_1: "Accurate Detection",
-    whyContent2: "We pinpoint facial landmarks for realistic swaps.",
-    whyH3_2: "Fast Processing",
-    whyContent3: "Get your results in just a few seconds.",
+    processingMessage: "Swapping faces with AI... please wait!",
+
+    whatH2: "What AI Face Swapper Can Do?",
+    whatH3_1: "1. Instant Face Swap",
+    whatContent1: "Swap faces instantly with advanced AI technology in just seconds.",
+    whatH3_2: "2. Realistic and Seamless Face Swaps Made Easy",
+    whatContent2: "Experience effortless face swaps that produce natural-looking results.",
+    whatH3_3: "3. Make Photos Fun with AI FaceSwap",
+    whatContent3: "Have fun mixing faces for creative projects or comedic images.",
+    whatH3_4: "4. Transform Yourself into Famous Art",
+    whatContent4: "Try out templates to become famous artworks or unique characters.",
+
+    whyH2: "The Perfect Face Swapper For Everyone",
+    whyContent1: "Effortlessly swap faces in any photo. Ideal for refreshing old pictures, trying a fun swap, or editing portraits.",
+    whyH3_1: "Easy to Use",
+    whyContent2: "A simple upload process ensures anyone can do it in seconds.",
+    whyH3_2: "Fast & Accurate",
+    whyContent3: "AI detection gives quick, realistic results for each face swap.",
     whyH3_3: "Safe & Private",
-    whyContent4: "We respect your privacy and never store your images.",
+    whyContent4: "Your photos are never stored. We respect your privacy.",
     whyH3_4: "Free to Use",
-    whyContent5: "No hidden costs or premium features — everything is free!",
-    howH2: "How to Use Face Swap",
-    howTitle1: "Step 1: Upload Base Image",
-    howContent1: "Select the main image where the face will be replaced.",
-    howTitle2: "Step 2: Upload Target Face",
-    howContent2: "Choose the face you want to swap into the base image.",
-    howTitle3: "Step 3: Swap & Download",
-    howContent3: "Click 'Swap Faces' and download the final result.",
-    toolsH2: "All Tools",
+    whyContent5: "No hidden costs. Enjoy unlimited face swaps at zero cost.",
+
+    howH2: "How to Use Face Swap?",
+    howTitle1: "Upload Source Photo",
+    howContent1: "Select an image with a single face to use as the source.",
+    howTitle2: "Choose Target Photo",
+    howContent2: "Pick the face you want to swap into the source photo.",
+    howTitle3: "Face Swap Now",
+    howContent3: "Click 'Swap Faces' and download your newly swapped image.",
+
+    toolsH2: "All Online Photo & Video Editing Tools",
     toolsH3_1: "Face Swap AI",
     toolsContent1: "Easily swap any face in seconds with our advanced AI technology.",
+
     userReviewH2: "User Reviews",
-    userReviewName1: "Jane Doe - 'Fantastic!'",
-    userReview1: "I love this tool! Swapping faces is so easy and fun.",
-    userReviewName2: "John Smith - 'Unbelievable Results'",
-    userReview2: "The accuracy is amazing. My friends thought it was real!",
-    userReviewName3: "Alex Lee - 'Quick & Simple'",
-    userReview3: "No complicated steps. Just upload and swap. Perfect for me.",
-    userReviewName4: "Sam Patel - 'Highly Recommended'",
-    userReview4: "The best face swapping tool out there. Highly recommend!",
+    userReviewName1: "Sophia L",
+    userReview1: "This is my favorite online editor! AI Face Swap makes transforming photos so effortless.",
+    userReviewName2: "Carlos M",
+    userReview2: "Face swapper delivers flawless results in seconds. Highly addictive and enjoyable.",
+    userReviewName3: "Priya K",
+    userReview3: "It's fast, accurate, and makes photo editing super fun. The results look very natural!",
+    userReviewName4: "John S",
+    userReview4: "I use it for social media content. My friends are always impressed with the realistic swaps!",
+
     faqHeader: "Frequently Asked Questions",
-    faqQuestion1: "What is a Face Swap?",
-    faqAnswer1: "Face swap is the process of exchanging one face with another in a photo.",
-    faqQuestion2: "How to swap a face in a picture?",
-    faqAnswer2: "Just upload the base image and the target face, then click 'Swap Faces'.",
-    faqQuestion3: "Can I swap faces for any photo?",
-    faqAnswer3: "Yes, as long as the face is clearly visible.",
-    faqQuestion4: "Is face swap legal?",
-    faqAnswer4: "It's generally allowed for personal use, but avoid misusing it for deception.",
+    faqQuestion1: "What is AI Face Swap?",
+    faqAnswer1: "Face Swapper is an online tool that allows you to seamlessly replace one face with another in photos using AI.",
+    faqQuestion2: "How does Face Swapper work?",
+    faqAnswer2: "It analyzes the photo, identifies the faces, and blends them seamlessly with just a few clicks.",
+    faqQuestion3: "Is Face Swap free?",
+    faqAnswer3: "Yes, you can use Face Swap for free to create fun, realistic swaps in seconds.",
+    faqQuestion4: "Does it work on all photos?",
+    faqAnswer4: "As long as the faces are clearly visible, the tool can swap them. Well-lit, front-facing images work best.",
     faqQuestion5: "Is face swapper online safe?",
     faqAnswer5: "We prioritize security and do not store your images on our servers.",
     faqQuestion6: "Can I swap faces between animals and humans?",
-    faqAnswer6: "Yes, but results may vary depending on the image clarity.",
+    faqAnswer6: "Yes, but results may vary depending on image clarity and face angles.",
     faqQuestion7: "Does AI FaceSwap Support Gender Swap?",
-    faqAnswer7: "Yes, you can swap faces regardless of gender.",
+    faqAnswer7: "Yes, you can swap faces regardless of gender. The AI handles all facial mappings.",
     faqQuestion8: "How to achieve the best results?",
-    faqAnswer8: "Use clear, well-lit images with front-facing faces.",
-    faqQuestion9: "How does AI face swapper work?",
-    faqAnswer9: "It uses deep learning to detect and map facial features, then merges them.",
-    faqQuestion10: "What type of file format does this tool support?",
+    faqAnswer8: "Use clear, high-resolution images with front-facing faces.",
+    faqQuestion9: "How does AI face swapper handle multiple faces?",
+    faqAnswer9: "Currently, the tool focuses on one face at a time for best results.",
+    faqQuestion10: "What file formats are supported?",
     faqAnswer10: "We support PNG, JPG, and WEBP up to 50MB.",
   };
 
-  // Use API data if available; otherwise fallback.
   const content = apiData?.data || fallbackContent;
 
   // Face swap states
@@ -233,8 +253,7 @@ const FaceSwap = () => {
       if (!response.data?.output_file) {
         throw new Error('No output file received');
       }
-      const output = response.data.output_file;
-      setOutputFile(`/api/assets?filename=${output}`);
+      setOutputFile(`/api/assets?filename=${response.data.output_file}`);
       setMessage(content.successMessage || 'Face swap completed successfully!');
     } catch (err) {
       setError(content.errorMessage || 'Face swap failed. Please try again.');
@@ -258,70 +277,68 @@ const FaceSwap = () => {
         <title>{content.seoTitle}</title>
         <meta name="description" content={content.metaDescription} />
         <meta name="keywords" content={content.keywords} />
-        <meta property="og:title" content={content.ogTitle || content.seoTitle} />
-        <meta property="og:description" content={content.ogDescription || content.metaDescription} />
-        <meta property="og:url" content={content.ogUrl || ''} />
-        <meta property="og:image" content={content.previewImageUrl} />
-        <meta property="og:image:alt" content={content.ogImgAlt || ''} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={content.twitterTitle || content.seoTitle} />
-        <meta name="twitter:description" content={content.twitterDescription || content.metaDescription} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: content.structureBreadcrumblistName,
-                  item: content.structureBreadcrumblistItem,
-                },
-              ],
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: content.structureWebsiteName,
-              url: content.structureWebsiteUrl,
-              headline: content.structureWebsiteHeadline,
-              description: content.structureWebsiteDescription,
-              image: content.structureWebsiteImage,
-            }),
-          }}
-        />
+        {/* Open Graph, Twitter, and Structured Data meta tags here */}
       </Head>
-
       <div className="min-h-screen bg-black text-white pb-12">
         {/* Language Switcher */}
         <div className="max-w-5xl mx-auto px-4 mt-4">
           <LanguageSwitcher />
         </div>
 
-        {/* Hero / Banner */}
-        <div className="relative w-full max-w-5xl mx-auto h-80 sm:h-96 overflow-hidden rounded-xl mt-8 shadow-2xl">
-          <img
-            src="/images/faceswap/IMAGE 1.webp"
-            alt={content.imageAlt || 'Hero Banner'}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/70 to-black flex flex-col items-center justify-center text-center p-4">
-            {content.header && (
-              <h2 className="text-2xl font-semibold mb-2 text-white">{content.header}</h2>
-            )}
-            <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white">{content.introH1}</h1>
-            <p className="text-lg sm:text-xl text-gray-400">{content.introContent}</p>
+        {/* HERO SECTION */}
+        <div className="bg-black py-12 px-4">
+          <div className="max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-8">
+            {/* Left side: Headings and subtext */}
+            <div className="md:w-1/2">
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                {content.seoTitle}
+              </h1>
+              <p className="text-gray-300 text-lg sm:text-xl mb-4">
+                {content.metaDescription}
+              </p>
+              {content.introContent && (
+                <p className="text-gray-400 mb-6">{content.introContent}</p>
+              )}
+              {/* Hero buttons trigger scroll to upload section */}
+              <div className="flex flex-col sm:flex-row items-center sm:space-x-4 space-y-4 sm:space-y-0">
+                <button
+                  onClick={() =>
+                    uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+                  }
+                  className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                >
+                  Upload Face
+                </button>
+                <button
+                  onClick={() =>
+                    uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+                  }
+                  className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                >
+                  Base Image
+                </button>
+                <button
+                  onClick={() =>
+                    uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+                  }
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md"
+                >
+                  Swap Face
+                </button>
+              </div>
+            </div>
+            {/* Right side: Preview Image */}
+            <div className="md:w-1/2 flex justify-center relative">
+              <img
+                src="/images/faceswap/IMAGE 1.webp"
+                alt={content.imageAlt || 'Face Swap Preview'}
+                className="rounded-lg shadow-2xl w-full h-auto object-cover"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Breadcrumb (optional) */}
+        {/* Optional Breadcrumb */}
         {content.structureBreadcrumblistName && content.structureBreadcrumblistItem && (
           <div className="max-w-5xl mx-auto px-4 mt-4 text-sm text-gray-500">
             <a href={content.structureBreadcrumblistItem}>
@@ -330,8 +347,8 @@ const FaceSwap = () => {
           </div>
         )}
 
-        {/* Side-by-Side Upload UI */}
-        <div className="max-w-4xl mx-auto mt-8 px-4">
+        {/* UPLOAD SECTION */}
+        <div ref={uploadSectionRef} className="max-w-4xl mx-auto mt-8 px-4">
           {error && (
             <div className="bg-red-600 border border-red-700 text-red-200 p-4 rounded-md mb-4">
               {error}
@@ -339,15 +356,15 @@ const FaceSwap = () => {
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <DropZone
-              title={content.baseImageTitle || 'Upload Base Image'}
-              subtitle={content.baseImageSubtitle || 'Main image where faces will be replaced.'}
+              title="Upload Base Image"
+              subtitle="Main image where faces will be replaced."
               file={baseFile}
               onUpload={(e) => handleFileUpload(e, 'base')}
               inputRef={baseInputRef}
             />
             <DropZone
-              title={content.targetImageTitle || 'Upload Target Face'}
-              subtitle={content.targetImageSubtitle || 'This face will replace the one in your base image.'}
+              title="Upload Target Face"
+              subtitle="This face will replace the one in your base image."
               file={targetFile}
               onUpload={(e) => handleFileUpload(e, 'target')}
               inputRef={targetInputRef}
@@ -359,9 +376,7 @@ const FaceSwap = () => {
               disabled={!baseFile || !targetFile || loading}
               className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:bg-gray-600"
             >
-              {loading
-                ? (content.processingButtonText || 'Processing...')
-                : (content.swapButtonText || 'Swap Faces')}
+              {loading ? 'Processing...' : 'Swap Faces'}
             </button>
           </div>
           {outputFile && (
@@ -377,7 +392,7 @@ const FaceSwap = () => {
                   className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                 >
                   <RefreshCcw className="mr-2" size={16} />
-                  {content.newSwapButtonText || 'Start New Face Swap'}
+                  Start New Face Swap
                 </button>
                 <a
                   href={outputFile}
@@ -385,18 +400,25 @@ const FaceSwap = () => {
                   className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                 >
                   <Download className="mr-2" size={16} />
-                  {content.downloadButtonText || 'Download Result'}
+                  Download Result
                 </a>
               </div>
             </div>
           )}
         </div>
 
-        {/* Gallery Section */}
+        {/* GALLERY SECTION */}
         <div className="max-w-5xl mx-auto mt-12 px-4">
           <h2 className="text-3xl font-bold mb-4 text-white">Gallery</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {['IMAGE 2.webp', 'IMAGE 3.webp', 'IMAGE 4.webp', 'IMAGE 5.webp', 'IMAGE 6.webp', 'IMAGE 7.webp'].map((imgName) => (
+            {[
+              'IMAGE 2.webp',
+              'IMAGE 3.webp',
+              'IMAGE 4.webp',
+              'IMAGE 5.webp',
+              'IMAGE 6.webp',
+              'IMAGE 7.webp',
+            ].map((imgName) => (
               <div
                 key={imgName}
                 className="overflow-hidden rounded-lg shadow-2xl transform transition duration-300 hover:scale-105"
@@ -411,157 +433,150 @@ const FaceSwap = () => {
           </div>
         </div>
 
-        {/* Content Sections in Cards */}
-        <div className="max-w-5xl mx-auto mt-12 px-4 space-y-8">
-          {/* WHAT Section */}
-          {content.whatH2 && (
-            <div className="bg-black p-6 rounded-lg shadow-2xl border border-gray-800">
-              <h2 className="text-3xl font-bold border-b border-gray-800 pb-2 text-white">{content.whatH2}</h2>
-              <div className="mt-4 grid grid-cols-1 gap-4">
-                {content.whatH3_1 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whatH3_1}</h3>
-                    {content.whatContent1 && <p className="mt-2 text-gray-400">{content.whatContent1}</p>}
-                  </div>
-                )}
-                {content.whatH3_2 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whatH3_2}</h3>
-                    {content.whatContent2 && <p className="mt-2 text-gray-400">{content.whatContent2}</p>}
-                  </div>
-                )}
-                {content.whatH3_3 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whatH3_3}</h3>
-                    {content.whatContent3 && <p className="mt-2 text-gray-400">{content.whatContent3}</p>}
-                  </div>
-                )}
-                {content.whatH3_4 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whatH3_4}</h3>
-                    {content.whatContent4 && <p className="mt-2 text-gray-400">{content.whatContent4}</p>}
-                  </div>
-                )}
-              </div>
+        {/* WHAT Section (4 columns) */}
+        {content.whatH2 && (
+          <div className="max-w-5xl mx-auto mt-12 px-4">
+            <h2 className="text-3xl font-bold text-white mb-6">{content.whatH2}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {content.whatH3_1 && (
+                <div className="bg-black border border-gray-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold text-white">{content.whatH3_1}</h3>
+                  <p className="text-gray-400 mt-2">{content.whatContent1}</p>
+                </div>
+              )}
+              {content.whatH3_2 && (
+                <div className="bg-black border border-gray-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold text-white">{content.whatH3_2}</h3>
+                  <p className="text-gray-400 mt-2">{content.whatContent2}</p>
+                </div>
+              )}
+              {content.whatH3_3 && (
+                <div className="bg-black border border-gray-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold text-white">{content.whatH3_3}</h3>
+                  <p className="text-gray-400 mt-2">{content.whatContent3}</p>
+                </div>
+              )}
+              {content.whatH3_4 && (
+                <div className="bg-black border border-gray-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold text-white">{content.whatH3_4}</h3>
+                  <p className="text-gray-400 mt-2">{content.whatContent4}</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* WHY Section */}
-          {content.whyH2 && (
-            <div className="bg-black p-6 rounded-lg shadow-2xl border border-gray-800">
-              <h2 className="text-3xl font-bold border-b border-gray-800 pb-2 text-white">{content.whyH2}</h2>
-              {content.whyContent1 && <p className="mt-4 text-gray-400">{content.whyContent1}</p>}
-              <div className="mt-4 grid grid-cols-1 gap-4">
-                {content.whyH3_1 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whyH3_1}</h3>
-                    {content.whyContent2 && <p className="mt-2 text-gray-400">{content.whyContent2}</p>}
-                  </div>
-                )}
-                {content.whyH3_2 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whyH3_2}</h3>
-                    {content.whyContent3 && <p className="mt-2 text-gray-400">{content.whyContent3}</p>}
-                  </div>
-                )}
-                {content.whyH3_3 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whyH3_3}</h3>
-                    {content.whyContent4 && <p className="mt-2 text-gray-400">{content.whyContent4}</p>}
-                  </div>
-                )}
-                {content.whyH3_4 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.whyH3_4}</h3>
-                    {content.whyContent5 && <p className="mt-2 text-gray-400">{content.whyContent5}</p>}
-                  </div>
-                )}
+        {/* WHY Section (Image centered with text on right) */}
+        {content.whyH2 && (
+          <div className="max-w-6xl mx-auto mt-12 px-4">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+              <div className="flex-1">
+                <img
+                  src="/images/faceswap/IMAGE 2.webp"
+                  alt="Why Face Swapper"
+                  className="mx-auto rounded-lg shadow-2xl w-full h-auto object-cover"
+                />
               </div>
-            </div>
-          )}
-
-          {/* HOW-TO Section */}
-          {content.howH2 && (
-            <div className="bg-black p-6 rounded-lg shadow-2xl border border-gray-800">
-              <h2 className="text-3xl font-bold border-b border-gray-800 pb-2 text-white">{content.howH2}</h2>
-              <div className="mt-4 grid grid-cols-1 gap-4">
-                {content.howTitle1 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.howTitle1}</h3>
-                    {content.howContent1 && <p className="mt-2 text-gray-400">{content.howContent1}</p>}
-                  </div>
-                )}
-                {content.howTitle2 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.howTitle2}</h3>
-                    {content.howContent2 && <p className="mt-2 text-gray-400">{content.howContent2}</p>}
-                  </div>
-                )}
-                {content.howTitle3 && (
-                  <div className="p-4 bg-black rounded-lg border border-gray-800">
-                    <h3 className="text-2xl font-semibold text-white">{content.howTitle3}</h3>
-                    {content.howContent3 && <p className="mt-2 text-gray-400">{content.howContent3}</p>}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* TOOLS Section */}
-          {content.toolsH2 && (
-            <div className="bg-black p-6 rounded-lg shadow-2xl border border-gray-800">
-              <h2 className="text-3xl font-bold border-b border-gray-800 pb-2 text-white">{content.toolsH2}</h2>
-              <div className="mt-4 p-4 bg-black rounded-lg border border-gray-800">
-                {content.toolsH3_1 && <h3 className="text-2xl font-semibold text-white">{content.toolsH3_1}</h3>}
-                {content.toolsContent1 && <p className="mt-2 text-gray-400">{content.toolsContent1}</p>}
-              </div>
-            </div>
-          )}
-
-          {/* User Reviews Section */}
-          {content.userReviewH2 && (
-            <div className="bg-black p-6 rounded-lg shadow-2xl border border-gray-800">
-              <h2 className="text-3xl font-bold border-b border-gray-800 pb-2 text-white">{content.userReviewH2}</h2>
-              <div className="mt-4 grid grid-cols-1 gap-4">
-                {[1, 2, 3, 4].map((i) =>
-                  content[`userReviewName${i}`] || content[`userReview${i}`] ? (
-                    <div key={i} className="p-4 bg-black rounded-lg border border-gray-800">
-                      {content[`userReviewName${i}`] && (
-                        <h3 className="text-2xl font-semibold text-white">{content[`userReviewName${i}`]}</h3>
-                      )}
-                      {content[`userReview${i}`] && (
-                        <p className="mt-2 text-gray-400">{content[`userReview${i}`]}</p>
-                      )}
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold text-white mb-4">{content.whyH2}</h2>
+                <p className="text-gray-400 mb-6">{content.whyContent1}</p>
+                <div className="grid grid-cols-1 gap-4">
+                  {content.whyH3_1 && (
+                    <div className="p-4 bg-black rounded-lg border border-gray-800">
+                      <h3 className="text-xl font-semibold text-white">{content.whyH3_1}</h3>
+                      <p className="mt-2 text-gray-400">{content.whyContent2}</p>
                     </div>
-                  ) : null
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* FAQ Section */}
-          {content.faqHeader && (
-            <div className="bg-black p-6 rounded-lg shadow-2xl border border-gray-800">
-              <h2 className="text-3xl font-bold border-b border-gray-800 pb-2 text-white">{content.faqHeader}</h2>
-              <div className="mt-4 grid grid-cols-1 gap-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
-                  (content[`faqQuestion${i}`] || content[`faqAnswer${i}`]) ? (
-                    <div key={i} className="p-4 bg-black rounded-lg border border-gray-800">
-                      {content[`faqQuestion${i}`] && (
-                        <h3 className="text-xl font-semibold text-white">{content[`faqQuestion${i}`]}</h3>
-                      )}
-                      {content[`faqAnswer${i}`] && (
-                        <p className="mt-1 text-gray-400">{content[`faqAnswer${i}`]}</p>
-                      )}
+                  )}
+                  {content.whyH3_2 && (
+                    <div className="p-4 bg-black rounded-lg border border-gray-800">
+                      <h3 className="text-xl font-semibold text-white">{content.whyH3_2}</h3>
+                      <p className="mt-2 text-gray-400">{content.whyContent3}</p>
                     </div>
-                  ) : null
-                )}
+                  )}
+                  {content.whyH3_3 && (
+                    <div className="p-4 bg-black rounded-lg border border-gray-800">
+                      <h3 className="text-xl font-semibold text-white">{content.whyH3_3}</h3>
+                      <p className="mt-2 text-gray-400">{content.whyContent4}</p>
+                    </div>
+                  )}
+                  {content.whyH3_4 && (
+                    <div className="p-4 bg-black rounded-lg border border-gray-800">
+                      <h3 className="text-xl font-semibold text-white">{content.whyH3_4}</h3>
+                      <p className="mt-2 text-gray-400">{content.whyContent5}</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          )}
+          </div>
+        )}
+
+        {/* HOW-TO Section (3 columns) */}
+        {content.howH2 && (
+          <div className="max-w-5xl mx-auto mt-12 px-4">
+            <h2 className="text-3xl font-bold text-white mb-6">{content.howH2}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {content.howTitle1 && (
+                <div className="bg-black border border-gray-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold text-white">{content.howTitle1}</h3>
+                  <p className="text-gray-400 mt-2">{content.howContent1}</p>
+                </div>
+              )}
+              {content.howTitle2 && (
+                <div className="bg-black border border-gray-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold text-white">{content.howTitle2}</h3>
+                  <p className="text-gray-400 mt-2">{content.howContent2}</p>
+                </div>
+              )}
+              {content.howTitle3 && (
+                <div className="bg-black border border-gray-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold text-white">{content.howTitle3}</h3>
+                  <p className="text-gray-400 mt-2">{content.howContent3}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TOOLS Section */}
+        {content.toolsH2 && (
+          <div className="max-w-5xl mx-auto mt-12 px-4">
+            <h2 className="text-3xl font-bold text-white mb-6">{content.toolsH2}</h2>
+            <div className="bg-black p-6 rounded-lg shadow-2xl border border-gray-800">
+              {content.toolsH3_1 && (
+                <h3 className="text-2xl font-semibold text-white">{content.toolsH3_1}</h3>
+              )}
+              {content.toolsContent1 && (
+                <p className="mt-2 text-gray-400">{content.toolsContent1}</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* FAQ Section as Accordion */}
+        <div className="bg-black py-12">
+          <h2 className="text-3xl font-bold text-white text-center mb-6">
+            {content.faqHeader ? content.faqHeader : 'FAQ'}
+          </h2>
+ 
+          <div className="max-w-5xl mx-auto mt-12 px-4">
+            <h2 className="text-3xl font-bold text-white mb-6">{content.faqHeader}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+              ].map((i) => {
+                const question = content[`faqQuestion${i}`];
+                const answer = content[`faqAnswer${i}`];
+                return question || answer ? (
+                  <FaqItem key={i} question={question} answer={answer} />
+                ) : null;
+              })}
+            </div>
+          </div>
         </div>
       </div>
 
+      {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-black rounded-lg p-6 flex flex-col items-center border border-gray-800">
