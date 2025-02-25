@@ -45,56 +45,37 @@ const Layout = ({ children }) => {
                   Faceswap
                 </Link>
                 <Link
-                  href="/background-remover"
-                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
-                >
-                  Background Remover
-                </Link>
-                <Link
                   href="/multifaceswap"
                   className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
                 >
                   Multi-Faceswap
                 </Link>
                 <Link
-                  href="/faceshape-detector"
+                  href="/blogs"
                   className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
                 >
-                  Face Shape Detector
-                </Link>
-                <Link
-                  href="/the-wall"
-                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
-                >
-                  The Wall
-                </Link>
+                  Blogs
+                </Link>                  
                 <Link
                   href="/about"
                   className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
                 >
                   About
+                </Link>   
+                <Link
+                  href="/privacy"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  Privacy Policy
                 </Link>
+                <Link
+                  href="/terms"
+                  className="block px-4 py-2 rounded hover:bg-cyan-600 transition"
+                >
+                  Terms of Service
+                </Link>                
+                                
               </nav>
-            </div>
-            {/* Language Switcher */}
-            <div className="p-6 border-t border-gray-800">
-              <div className="text-gray-500 text-sm mb-2 text-center">Language</div>
-              <div className="flex justify-center space-x-2">
-                {locales.map((loc) => (
-                  <Link
-                    key={loc}
-                    href={asPath}
-                    locale={loc}
-                    className={`px-3 py-1 rounded-full border border-gray-700 transition-colors ${
-                      locale === loc
-                        ? 'bg-cyan-600 text-white'
-                        : 'bg-gray-800 text-gray-400 hover:bg-cyan-700 hover:text-white'
-                    }`}
-                  >
-                    {loc.toUpperCase()}
-                  </Link>
-                ))}
-              </div>
             </div>
           </div>
           {/* Footer */}
