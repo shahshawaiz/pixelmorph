@@ -179,7 +179,7 @@ const AutoSlider = ({ slides = [] }) => {
                 <img
                   src={slide.image}
                   alt={slide.heading || `Slide ${index + 1}`}
-                  className="w-full h-64 object-cover"
+                  className="w-full object-cover"
                 />
               </div>
               {/* Bottom Section: Text */}
@@ -564,29 +564,29 @@ const FaceSwap = () => {
               </p>
               <AutoSlider
                 slides={[
+                  // {
+                  //   heading: content.whyH3_1,
+                  //   text: content.whyContent1,
+                  //   image: '/images/faceswap/IMAGE 2.webp',
+                  // },
+                  // {
+                  //   heading: content.whyH3_2,
+                  //   text: content.whyContent2,
+                  //   image: '/images/faceswap/IMAGE 3.webp',
+                  // },
                   {
                     heading: content.whyH3_1,
                     text: content.whyContent1,
-                    image: '/images/faceswap/IMAGE 2.webp',
+                    image: '/images/faceswap/IMAGE 4.webp',
                   },
                   {
                     heading: content.whyH3_2,
                     text: content.whyContent2,
-                    image: '/images/faceswap/IMAGE 3.webp',
+                    image: '/images/faceswap/IMAGE 5.webp',
                   },
                   {
                     heading: content.whyH3_3,
                     text: content.whyContent3,
-                    image: '/images/faceswap/IMAGE 4.webp',
-                  },
-                  {
-                    heading: content.whyH3_4,
-                    text: content.whyContent4,
-                    image: '/images/faceswap/IMAGE 5.webp',
-                  },
-                  {
-                    heading: '',
-                    text: content.whyContent5,
                     image: '/images/faceswap/IMAGE 6.webp',
                   },
                 ]}
