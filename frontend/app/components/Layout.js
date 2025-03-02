@@ -35,8 +35,8 @@ const Layout = ({ children }) => {
               </div>
               <nav className="space-y-2">
                 <Link href="/" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Faceswap</Link>
-                <Link href="/multifaceswap" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Multi-Faceswap</Link>
-                <Link href="/blogs" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Blogs</Link>
+                {/* <Link href="/multifaceswap" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Multi-Faceswap</Link>
+                <Link href="/blogs" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Blogs</Link> */}
                 <Link href="/about" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">About</Link>
                 <Link href="/privacy" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Privacy Policy</Link>
                 <Link href="/terms" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Terms of Service</Link>

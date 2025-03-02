@@ -390,6 +390,7 @@ const FaceSwap = () => {
     <Layout>
       <Head>
         <title>{content.seoTitle}</title>
+        <meta name="title" content={content.seoTitle} />
         <meta name="description" content={content.metaDescription} />
         <meta name="keywords" content={content.keywords} />
 
@@ -433,14 +434,11 @@ const FaceSwap = () => {
             {/* Left: Text */}
             <div className="md:w-1/2">
               <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-                {content.seoTitle}
+                {content.introH1}
               </h1>
               <p className="text-gray-300 text-xl sm:text-2xl mb-6">
-                {content.metaDescription}
+                {content.introContent}
               </p>
-              {content.introContent && (
-                <p className="text-gray-400 mb-6">{content.introContent}</p>
-              )}
             </div>
             {/* Right: Image */}
             <div className="md:w-1/2 flex justify-center">

@@ -1,31 +1,42 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 const LanguageSwitcher = () => {
   const router = useRouter();
   const { locale, locales, asPath, defaultLocale, isReady } = router;
+  const autoDetectedRef = useRef(false);
 
   const handleLocaleChange = (newLocale) => {
+    // Prevent redirecting if already in desired locale
+    if (router.locale === newLocale) return;
     router.replace(asPath, asPath, { locale: newLocale });
   };
 
   useEffect(() => {
     if (!isReady) return;
+    if (autoDetectedRef.current) return;
 
-    // Check if we’ve already auto-detected the locale in this session.
-    if (localStorage.getItem('autoDetected')) return;
+    // Use sessionStorage (more reliable in a single session on mobile) to mark detection as done.
+    if (sessionStorage.getItem('autoDetected')) {
+      autoDetectedRef.current = true;
+      return;
+    }
 
-    // If the current locale isn’t the default, assume it’s already been set.
+    // If the current locale isn’t the default, assume a locale was already set and do nothing.
     if (locale !== defaultLocale) {
-      localStorage.setItem('autoDetected', 'true');
+      sessionStorage.setItem('autoDetected', 'true');
+      autoDetectedRef.current = true;
       return;
     }
 
     const deviceLang = navigator.language.split('-')[0];
+    // Only change if the device language is supported and is different from current.
     if (locales.includes(deviceLang) && deviceLang !== locale) {
       handleLocaleChange(deviceLang);
     }
-    localStorage.setItem('autoDetected', 'true');
+
+    sessionStorage.setItem('autoDetected', 'true');
+    autoDetectedRef.current = true;
   }, [isReady, locale, locales, defaultLocale]);
 
   return (
