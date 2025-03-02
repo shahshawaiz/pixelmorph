@@ -1,21 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const LanguageSwitcher = () => {
   const router = useRouter();
-  const { locale, locales, asPath, defaultLocale } = router;
-  const [autoDetected, setAutoDetected] = useState(false);
+  const { locale, locales, asPath, defaultLocale, isReady } = router;
 
   const handleLocaleChange = (newLocale) => {
-    router.push(asPath, asPath, { locale: newLocale });
+    router.replace(asPath, asPath, { locale: newLocale });
   };
 
   useEffect(() => {
-    if (!router.isReady || autoDetected) return;
+    if (!isReady) return;
 
-    // If the locale has already been set (i.e. it is not the default), do not auto-detect.
+    // Check if we’ve already auto-detected the locale in this session.
+    if (localStorage.getItem('autoDetected')) return;
+
+    // If the current locale isn’t the default, assume it’s already been set.
     if (locale !== defaultLocale) {
-      setAutoDetected(true);
+      localStorage.setItem('autoDetected', 'true');
       return;
     }
 
@@ -23,8 +25,8 @@ const LanguageSwitcher = () => {
     if (locales.includes(deviceLang) && deviceLang !== locale) {
       handleLocaleChange(deviceLang);
     }
-    setAutoDetected(true);
-  }, [router.isReady, autoDetected, locales, locale, defaultLocale]);
+    localStorage.setItem('autoDetected', 'true');
+  }, [isReady, locale, locales, defaultLocale]);
 
   return (
     <select
