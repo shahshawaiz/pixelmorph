@@ -22,45 +22,13 @@ import {
 import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import LanguageSwitcher from './LanguageSwitcher';
 
-// Language Switcher: auto-detect device language; placed in the nav bar.
-const LanguageSwitcher = () => {
-  const router = useRouter();
-  const { locale, locales, asPath } = router;
-  const [autoDetected, setAutoDetected] = useState(false);
-
-  const handleLocaleChange = (newLocale) => {
-    router.push(asPath, asPath, { locale: newLocale });
-  };
-
-  useEffect(() => {
-    if (!router.isReady || autoDetected) return;
-    const deviceLang = navigator.language.split('-')[0];
-    if (locales.includes(deviceLang) && deviceLang !== locale) {
-      handleLocaleChange(deviceLang);
-    }
-    setAutoDetected(true);
-  }, [router.isReady, autoDetected, locales, locale]);
-
-  return (
-    <select
-      value={locale}
-      onChange={(e) => handleLocaleChange(e.target.value)}
-      className="px-3 py-1 rounded-md bg-gray-800 text-gray-400 focus:outline-none"
-    >
-      {locales.map((loc) => (
-        <option key={loc} value={loc}>
-          {loc.toUpperCase()}
-        </option>
-      ))}
-    </select>
-  );
-};
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 // DropZone component for image uploads
-const DropZone = ({ title, subtitle, file, onUpload, inputRef }) => {
+const DropZone = ({ title, subtitle, file, onUpload, inputRef, buttonText }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDrag = (e) => {
@@ -100,13 +68,13 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef }) => {
       ) : (
         <>
           <Upload className="w-12 h-12 text-gray-500 mb-3" />
-          {title && <h3 className="text-lg font-medium mb-1 text-white">{title}</h3>}
-          {subtitle && <p className="text-sm text-gray-500 mb-3">{subtitle}</p>}
+          {title && <p className="text-lg font-medium mb-1 text-white">{title}</p>}
+          {subtitle && <p className="text-sm text-gray-500 mb-3 text-center">{subtitle}</p>}
           <button
             onClick={() => inputRef.current?.click()}
             className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition"
           >
-            Choose File
+            {buttonText || 'Upload Image'}
           </button>
         </>
       )}
@@ -131,10 +99,122 @@ const FaqItem = ({ question, answer }) => {
         onClick={() => setOpen(!open)}
         className="w-full text-left focus:outline-none flex items-center justify-between"
       >
-        <h3 className="text-xl font-semibold text-white">{question}</h3>
+        <p className="text-xl font-semibold text-white">{question}</p>
         <Plus className={`w-6 h-6 text-white transition-transform ${open ? 'rotate-45' : ''}`} />
       </button>
       {open && <p className="mt-2 text-gray-400">{answer}</p>}
+    </div>
+  );
+};
+
+const AutoSlider = ({ slides = [] }) => {
+  // For desktop, we show 3 slides at a time (adjust as needed)
+  const visibleCount = 3;
+  // Create an extended slides array by appending clones of the first visibleCount slides
+  const extendedSlides = [...slides, ...slides.slice(0, visibleCount)];
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
+
+  // Auto-scroll effect (pauses when hovering)
+  useEffect(() => {
+    if (!isHovering) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => prev + 1);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isHovering]);
+
+  // When the transition ends, if we're in the cloned region,
+  // reset the index to 0 instantly (disabling transition briefly)
+  const handleTransitionEnd = () => {
+    if (currentIndex >= slides.length) {
+      setTransitionEnabled(false);
+      setCurrentIndex(0);
+      setTimeout(() => setTransitionEnabled(true), 50);
+    }
+  };
+
+  // Arrow navigation handlers
+  const goToNextSlide = () => {
+    setCurrentIndex((prev) => prev + 1);
+  };
+
+  const goToPrevSlide = () => {
+    if (currentIndex === 0) {
+      // Jump to the last original slide
+      setTransitionEnabled(false);
+      setCurrentIndex(slides.length - 1);
+      setTimeout(() => setTransitionEnabled(true), 50);
+    } else {
+      setCurrentIndex((prev) => prev - 1);
+    }
+  };
+
+  // On desktop each slide takes 100/visibleCount % width.
+  const slideWidth = 100 / visibleCount;
+
+  return (
+    <div
+      className="relative w-full overflow-hidden"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      {/* Slider Track */}
+      <div
+        className="flex"
+        style={{
+          transform: `translateX(-${currentIndex * slideWidth}%)`,
+          transition: transitionEnabled ? "transform 700ms ease-in-out" : "none",
+        }}
+        onTransitionEnd={handleTransitionEnd}
+      >
+        {extendedSlides.map((slide, index) => (
+          <div key={index} className="w-full md:w-1/3 flex-none p-4">
+            <div className="bg-black border border-gray-800 rounded-lg shadow-xl overflow-hidden flex flex-col h-full">
+              {/* Upper Section: Image stretched to all edges */}
+              <div className="w-full">
+                <img
+                  src={slide.image}
+                  alt={slide.heading || `Slide ${index + 1}`}
+                  className="w-full h-64 object-cover"
+                />
+              </div>
+              {/* Bottom Section: Text */}
+              <div className="p-4">
+                {slide.heading && (
+                  <p className="text-xl font-semibold text-white mb-2">
+                    {slide.heading}
+                  </p>
+                )}
+                <p className="text-gray-400">{slide.text}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Navigation Arrows */}
+      {slides.length > visibleCount && (
+        <>
+          <button
+            onClick={goToPrevSlide}
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-gray-600"
+            aria-label="Previous slide"
+          >
+            &larr;
+          </button>
+          <button
+            onClick={goToNextSlide}
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-gray-600"
+            aria-label="Next slide"
+          >
+            &rarr;
+          </button>
+        </>
+      )}
     </div>
   );
 };
@@ -149,12 +229,13 @@ const FaceSwap = () => {
   const { data: apiData } = useSWR(`/api/loadSwrFaceswap?locale=${locale}`, fetcher);
   console.log('SWR Data:', apiData);
 
+  // Fallback content if the API doesn't return anything
   const fallbackContent = {
     seoTitle: "Free AI Face Swap – Best Face Swapper Online",
     metaDescription: "Create fun and unique photos with AI Face Swap. Swap faces seamlessly in seconds.",
     keywords: "Face Swap, AI, Photo Editing, Online Tool",
-    structureBreadcrumblistName: "Face Swap Home",
-    structureBreadcrumblistItem: "/faceswap",
+    structureBreadcrumblistName: "Home",
+    structureBreadcrumblistItem: "/",
     structureWebsiteName: "Face Swap AI",
     structureWebsiteUrl: "https://mydomain.com",
     structureWebsiteHeadline: "AI Face Swap Online",
@@ -205,6 +286,7 @@ const FaceSwap = () => {
     howTitle3: "Face Swap Now",
     howContent3: "Click 'Swap Faces' and download your newly swapped image.",
 
+    // Tools (new)
     toolsH2: "All Online Photo & Video Editing Tools",
     toolsH3_1: "Face Swap AI",
     toolsContent1: "Easily swap any face in seconds with our advanced AI technology.",
@@ -230,6 +312,17 @@ const FaceSwap = () => {
     faqAnswer9: "Currently, the tool focuses on one face at a time for best results.",
     faqQuestion10: "What file formats are supported?",
     faqAnswer10: "We support PNG, JPG, and WEBP up to 50MB.",
+
+    // Reviews placeholders
+    'faceswap.user.review.h2': "User Reviews",
+    'faceswap.user.review.name.1': "John Doe",
+    'faceswap.user.review.1': "Amazing results! The AI swaps are super realistic.",
+    'faceswap.user.review.name.2': "Jane Smith",
+    'faceswap.user.review.2': "I had a blast swapping faces with my friends’ photos.",
+    'faceswap.user.review.name.3': "Carlos M.",
+    'faceswap.user.review.3': "Easy to use and fast. Love this tool!",
+    'faceswap.user.review.name.4': "Emily R.",
+    'faceswap.user.review.4': "Best face swapper out there. Highly recommended!"
   };
 
   const content = apiData?.data || fallbackContent;
@@ -294,7 +387,7 @@ const FaceSwap = () => {
   };
 
   return (
-    <div>
+    <Layout>
       <Head>
         <title>{content.seoTitle}</title>
         <meta name="description" content={content.metaDescription} />
@@ -332,68 +425,11 @@ const FaceSwap = () => {
         />
       </Head>
 
-      {/* Sticky Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 bg-gradient-to-r from-gray-900 to-black bg-opacity-90 z-50 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-xl font-bold text-white">
-            <Link href="/">
-              <img src="/logo.png" alt="Pixelmorph Logo" className="h-10 w-auto" />
-            </Link>
-          </div>
-          {/* Desktop Links */}
-          <div className="hidden md:flex space-x-4">
-            <a href="#hero" className="text-gray-400 hover:text-white" title="Home">
-              <Home size={20} />
-            </a>
-            <a href="#upload" className="text-gray-400 hover:text-white" title="Upload">
-              <Upload size={20} />
-            </a>
-            <a href="#what" className="text-gray-400 hover:text-white" title="What">
-              <Info size={20} />
-            </a>
-            <a href="#why" className="text-gray-400 hover:text-white" title="Why">
-              <Lightbulb size={20} />
-            </a>
-            <a href="#how" className="text-gray-400 hover:text-white" title="How">
-              <Wrench size={20} />
-            </a>
-            <a href="#faq" className="text-gray-400 hover:text-white" title="FAQ">
-              <HelpCircle size={20} />
-            </a>
-          </div>
-          {/* Language Switcher & Mobile Menu Toggle */}
-          <div className="flex items-center">
-            <LanguageSwitcher />
-            <div className="md:hidden ml-4">
-              <button
-                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-gray-400 hover:text-white focus:outline-none"
-              >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-          </div>
-        </div>
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-gradient-to-r from-gray-900 to-black">
-            <div className="px-4 py-2 space-y-2">
-              <a href="#hero" className="block text-gray-400 hover:text-white">Home</a>
-              <a href="#upload" className="block text-gray-400 hover:text-white">Upload</a>
-              <a href="#what" className="block text-gray-400 hover:text-white">What</a>
-              <a href="#why" className="block text-gray-400 hover:text-white">Why</a>
-              <a href="#how" className="block text-gray-400 hover:text-white">How</a>
-              <a href="#faq" className="block text-gray-400 hover:text-white">FAQ</a>
-            </div>
-          </div>
-        )}
-      </nav>
-
       {/* Main Content Container */}
-      <div className="pt-20">
+      <div className="">
         {/* HERO SECTION */}
         <section id="hero" className="bg-gradient-to-br from-gray-900 via-black to-gray-800 py-16 px-8 border-b border-gray-700">
-          <div className="max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-8">
+          <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-8">
             {/* Left: Text */}
             <div className="md:w-1/2">
               <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
@@ -433,20 +469,20 @@ const FaceSwap = () => {
               {error}
             </div>
           )}
-          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
             <DropZone
-              title="Upload Base Image"
-              subtitle="Main image where faces will be replaced."
+              subtitle={content.engineDiv1Instruction}
               file={baseFile}
               onUpload={(e) => handleFileUpload(e, 'base')}
               inputRef={baseInputRef}
+              buttonText={content.engineDiv1Button}
             />
             <DropZone
-              title="Upload Target Face"
-              subtitle="This face will replace the one in your base image."
+              subtitle={content.engineDiv2Instruction}
               file={targetFile}
               onUpload={(e) => handleFileUpload(e, 'target')}
               inputRef={targetInputRef}
+              buttonText={content.engineDiv1Button}
             />
           </div>
           <div className="flex justify-center mt-8">
@@ -455,7 +491,7 @@ const FaceSwap = () => {
               disabled={!baseFile || !targetFile || loading}
               className="px-8 py-4 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition disabled:bg-gray-600"
             >
-              {loading ? 'Processing...' : 'Swap Faces'}
+              {loading ? 'Processing...' : content.engineRunButton}
             </button>
           </div>
           {outputFile && (
@@ -489,30 +525,30 @@ const FaceSwap = () => {
         {/* WHAT Section */}
         {content.whatH2 && (
           <section id="what" className="bg-gradient-to-l from-gray-900 via-black to-gray-800 py-16 px-8 border-t border-b border-gray-700">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-3xl font-bold text-white mb-8">{content.whatH2}</h2>
+            <div className="max-w-7xl mx-auto">
+              <p className="text-3xl font-bold text-white mb-8">{content.whatH2}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {content.whatH3_1 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-white">{content.whatH3_1}</h3>
+                    <p className="text-xl font-semibold text-white">{content.whatH3_1}</p>
                     <p className="text-gray-400 mt-4">{content.whatContent1}</p>
                   </div>
                 )}
                 {content.whatH3_2 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-white">{content.whatH3_2}</h3>
+                    <p className="text-xl font-semibold text-white">{content.whatH3_2}</p>
                     <p className="text-gray-400 mt-4">{content.whatContent2}</p>
                   </div>
                 )}
                 {content.whatH3_3 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-white">{content.whatH3_3}</h3>
+                    <p className="text-xl font-semibold text-white">{content.whatH3_3}</p>
                     <p className="text-gray-400 mt-4">{content.whatContent3}</p>
                   </div>
                 )}
                 {content.whatH3_4 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-white">{content.whatH3_4}</h3>
+                    <p className="text-xl font-semibold text-white">{content.whatH3_4}</p>
                     <p className="text-gray-400 mt-4">{content.whatContent4}</p>
                   </div>
                 )}
@@ -521,15 +557,15 @@ const FaceSwap = () => {
           </section>
         )}
 
-        {/* WHY Section (Horizontal Scroll) */}
+        {/* WHY Section (replaced with a slider) */}
         {content.whyH2 && (
           <section id="why" className="bg-gradient-to-r from-gray-800 to-gray-700 py-16 px-8">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">
+            <div className="max-w-7xlmx-auto">
+              <p className="text-3xl font-bold text-white mb-8 text-center">
                 {content.whyH2}
-              </h2>
-              <div className="overflow-x-auto snap-x snap-mandatory flex w-full space-x-8">
-                {[
+              </p>
+              <AutoSlider
+                slides={[
                   {
                     heading: content.whyH3_1,
                     text: content.whyContent1,
@@ -555,29 +591,8 @@ const FaceSwap = () => {
                     text: content.whyContent5,
                     image: '/images/faceswap/IMAGE 6.webp',
                   },
-                ].map((slide, index) => (
-                  <div
-                    key={index}
-                    className="snap-center min-w-[90%] md:min-w-[60%] bg-black border border-gray-800 rounded-lg p-6 shadow-xl flex flex-col md:flex-row items-center gap-6"
-                  >
-                    <div className="md:w-1/2">
-                      <img
-                        src={slide.image}
-                        alt={`Why Slide ${index + 1}`}
-                        className="rounded-lg shadow-2xl object-cover w-full"
-                      />
-                    </div>
-                    <div className="md:w-1/2">
-                      {slide.heading && (
-                        <h3 className="text-xl font-semibold text-white mb-4">
-                          {slide.heading}
-                        </h3>
-                      )}
-                      <p className="text-gray-400">{slide.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                ]}
+              />
             </div>
           </section>
         )}
@@ -585,24 +600,24 @@ const FaceSwap = () => {
         {/* HOW-TO Section */}
         {content.howH2 && (
           <section id="how" className="bg-gradient-to-br from-black to-gray-800 py-16 px-8 border-t border-gray-700">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-3xl font-bold text-white mb-8">{content.howH2}</h2>
+            <div className="max-w-7xl mx-auto">
+              <p className="text-3xl font-bold text-white mb-8">{content.howH2}</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {content.howTitle1 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-white">{content.howTitle1}</h3>
+                    <p className="text-xl font-semibold text-white">{content.howTitle1}</p>
                     <p className="text-gray-400 mt-4">{content.howContent1}</p>
                   </div>
                 )}
                 {content.howTitle2 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-white">{content.howTitle2}</h3>
+                    <p className="text-xl font-semibold text-white">{content.howTitle2}</p>
                     <p className="text-gray-400 mt-4">{content.howContent2}</p>
                   </div>
                 )}
                 {content.howTitle3 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-white">{content.howTitle3}</h3>
+                    <p className="text-xl font-semibold text-white">{content.howTitle3}</p>
                     <p className="text-gray-400 mt-4">{content.howContent3}</p>
                   </div>
                 )}
@@ -611,12 +626,83 @@ const FaceSwap = () => {
           </section>
         )}
 
+        {/* TOOLS Section (new) */}
+        {content.toolsH2 && (
+          <section id="tools" className="bg-gradient-to-br from-black to-gray-800 py-16 px-8 border-t border-gray-700">
+            <div className="max-w-7xl mx-auto">
+              <p className="text-3xl font-bold text-white mb-8">{content.toolsH2}</p>
+              <p className="text-xl font-semibold text-white mb-4">
+                {content.toolsH3_1}
+              </p>
+              <p className="text-gray-400">{content.toolsContent1}</p>
+            </div>
+          </section>
+        )}
+
+        {/* REVIEWS Section (improved styling) */}
+        {content['userReviewH2'] && (
+          <section
+            id="reviews"
+            className="py-20 px-4 bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100"
+          >
+            <div className="max-w-7xl mx-auto">
+              {/* Section Title */}
+              <p className="text-4xl font-extrabold text-center mb-12">
+                {content['userReviewH2']}
+              </p>
+
+              {/* Review Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="
+                      relative
+                      flex flex-col
+                      p-8
+                      bg-gray-900
+                      rounded-xl
+                      shadow-md
+                      hover:shadow-xl
+                      transition
+                      duration-300
+                      transform
+                      hover:-translate-y-1
+                      border-l-4
+                      border-indigo-500
+                    "
+                  >
+                    {/* Reviewer Name */}
+                    <div className="mb-2 text-xl font-semibold text-indigo-400">
+                      {content[`userReviewName${i}`]}
+                    </div>
+
+                    {/* Review Text */}
+                    <p className="text-gray-300 italic">
+                      “{content[`userReview${i}`]}”
+                    </p>
+
+                    {/* Optional Decorative Icon */}
+                    <svg
+                      className="absolute top-4 right-4 w-8 h-8 text-gray-600 opacity-40"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M5.64 9.36C4.48 10.52 3.76 12.05 3.76 13.64H2c0-1.78.72-3.49 2.02-4.74l1.62 1.46zm7.36 0c-1.16 1.16-1.88 2.69-1.88 4.28H8c0-1.78.72-3.49 2.02-4.74l1.62 1.46z" />
+                    </svg>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* FAQ Section */}
         <section id="faq" className="bg-gradient-to-l from-gray-900 to-black py-16 px-8">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="max-w-7xl mx-auto">
+            <p className="text-3xl font-bold text-white text-center mb-8">
               {content.faqHeader ? content.faqHeader : 'FAQ'}
-            </h2>
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
                 const question = content[`faqQuestion${i}`];
@@ -639,56 +725,7 @@ const FaceSwap = () => {
           </div>
         </div>
       )}
-
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 to-black text-gray-400 py-8">
-        <div className="max-w-6xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Column 1: Logo & Tagline */}
-          <div>
-            <img src="/logo.png" alt="Pixelmorph Logo" className="h-10 w-auto mb-2" />
-            <p className="text-sm text-gray-300">Pixelmorph - {content.seoTitle}</p>
-            <p className="text-sm text-gray-500 mt-2">© {new Date().getFullYear()} Pixelmorph. All rights reserved.</p>
-          </div>
-          {/* Column 2: More Links */}
-          <div>
-            <h3 className="font-semibold mb-2 text-white">More</h3>
-            <ul className="space-y-1 text-sm">
-              <li>
-                <a href="/blogs" className="hover:text-white">Blog</a>
-              </li>
-              <li>
-                <a href="/about" className="hover:text-white">About Us</a>
-              </li>
-              <li>
-                <a href="/terms" className="hover:text-white">Terms of Service</a>
-              </li>
-              <li>
-                <a href="/privacy" className="hover:text-white">Privacy Policy</a>
-              </li>
-            </ul>
-          </div>
-          {/* Column 3: Social Links & Language */}
-          <div>
-            <h3 className="font-semibold mb-2 text-white">Follow Us</h3>
-            <div className="flex space-x-4 mb-4">
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-white">
-                <Twitter size={20} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-white">
-                <Instagram size={20} />
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-white">
-                <Facebook size={20} />
-              </a>
-            </div>
-            <div className="mt-4">
-              <h4 className="text-sm font-medium text-white mb-1">Change Language</h4>
-              <LanguageSwitcher />
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </Layout>
   );
 };
 

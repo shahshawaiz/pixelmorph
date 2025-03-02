@@ -734,6 +734,213 @@
           "localized": true
         }
       }
+    },
+    "aboutTitle": {
+      "type": "string",
+      "description": "faceswap.about.title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "aboutBody": {
+      "type": "text",
+      "description": "faceswap.about.body",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "privacyTitle": {
+      "type": "string",
+      "description": "faceswap.privacy.title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "privacyBody": {
+      "type": "text",
+      "description": "faceswap.privacy.body",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "termsTitle": {
+      "type": "string",
+      "description": "faceswap.terms.title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "termsBody": {
+      "type": "text",
+      "description": "faceswap.terms.body",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "engineDiv1Instruction": {
+      "type": "text",
+      "description": "faceswap.engine.div1.instruction",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "engineDiv1Button": {
+      "type": "string",
+      "description": "faceswap.engine.div1.button",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "engineDiv2Instruction": {
+      "type": "text",
+      "description": "faceswap.engine.div2.instruction",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "engineDiv2Button": {
+      "type": "string",
+      "description": "faceswap.engine.div2.button",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "engineRunButton": {
+      "type": "string",
+      "description": "faceswap.engine.run.button",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faceswapToolsH2": {
+      "type": "string",
+      "description": "faceswapToolsH2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faceswapToolsH3_1": {
+      "type": "string",
+      "description": "faceswapToolsH3_1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "faceswapToolsContent1": {
+      "type": "text",
+      "description": "faceswapToolsContent1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "multiFaceswapToolsH2": {
+      "type": "string",
+      "description": "multiFaceswapToolsH2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "multiFaceswapToolsH3_1": {
+      "type": "string",
+      "description": "multiFaceswapToolsH3_1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "multiFaceswapToolsContent1": {
+      "type": "text",
+      "description": "multiFaceswapToolsContent1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "videoFaceswapToolsH2": {
+      "type": "string",
+      "description": "videoFaceswapToolsH2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "videoFaceswapToolsH3_1": {
+      "type": "string",
+      "description": "videoFaceswapToolsH3_1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "videoFaceswapToolsContent1": {
+      "type": "text",
+      "description": "videoFaceswapToolsContent1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "multiVideoFaceswapToolsH2": {
+      "type": "string",
+      "description": "multiVideoFaceswapToolsH2",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "multiVideoFaceswapToolsH3_1": {
+      "type": "string",
+      "description": "multiVideoFaceswapToolsH3_1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "multiVideoFaceswapToolsContent1": {
+      "type": "text",
+      "description": "multiVideoFaceswapToolsContent1",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

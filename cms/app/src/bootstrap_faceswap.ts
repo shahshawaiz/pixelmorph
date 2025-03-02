@@ -69,9 +69,18 @@ const KEY_MAP = {
   'faceswap.how.content.3': 'howContent3',
 
   // TOOLS
-  'faceswap.tools.h2': 'toolsH2',
-  'faceswap.tools.h3.1': 'toolsH3_1',
-  'faceswap.tools.content.1': 'toolsContent1',
+  'faceswap.tools.h2': 'faceswapToolsH2',
+  'faceswap.tools.h3.1': 'faceswapToolsH3_1',
+  'faceswap.tools.content.1': 'faceswapToolsContent1',
+  'multi.faceswap.tools.h2': 'multiFaceswapToolsH2',
+  'multi.faceswap.tools.h3.1': 'multiFaceswapToolsH3_1',
+  'multi.faceswap.tools.content.1': 'multiFaceswapToolsContent1',
+  'video.faceswap.tools.h2': 'videoFaceswapToolsH2',
+  'video.faceswap.tools.h3.1': 'videoFaceswapToolsH3_1',
+  'video.faceswap.tools.content.1': 'videoFaceswapToolsContent1',
+  'multi.video.faceswap.tools.h2': 'multiVideoFaceswapToolsH2',
+  'multi.video.faceswap.tools.h3.1': 'multiVideoFaceswapToolsH3_1',
+  'multi.video.faceswap.tools.content.1': 'multiVideoFaceswapToolsContent1',
 
   // USER REVIEWS
   'faceswap.user.review.h2': 'userReviewH2',
@@ -105,7 +114,20 @@ const KEY_MAP = {
   'multi.faceswap.faq.h3.9': 'faqQuestion9',
   'multi.faceswap.faq.content.9': 'faqAnswer9',
   'multi.faceswap.faq.h3.10': 'faqQuestion10',
-  'multi.faceswap.faq.content.10': 'faqAnswer10'
+  'multi.faceswap.faq.content.10': 'faqAnswer10',
+
+  // --- NEW KEYS ---
+  'faceswap.about.title': 'aboutTitle',
+  'faceswap.about.body': 'aboutBody',
+  'faceswap.privacy.title': 'privacyTitle',
+  'faceswap.privacy.body': 'privacyBody',
+  'faceswap.terms.title': 'termsTitle',
+  'faceswap.terms.body': 'termsBody',
+  'faceswap.engine.div1.instruction': 'engineDiv1Instruction',
+  'faceswap.engine.div1.button': 'engineDiv1Button',
+  'faceswap.engine.div2.instruction': 'engineDiv2Instruction',
+  'faceswap.engine.div2.button': 'engineDiv2Button',
+  'faceswap.engine.run.button': 'engineRunButton'
 };
 
 /**
