@@ -185,9 +185,9 @@ const AutoSlider = ({ slides = [] }) => {
               {/* Bottom Section: Text */}
               <div className="p-4">
                 {slide.heading && (
-                  <p className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-white mb-2">
                     {slide.heading}
-                  </p>
+                  </h3>
                 )}
                 <p className="text-gray-400">{slide.text}</p>
               </div>
@@ -197,7 +197,7 @@ const AutoSlider = ({ slides = [] }) => {
       </div>
 
       {/* Navigation Arrows */}
-      {slides.length > visibleCount && (
+      {(
         <>
           <button
             onClick={goToPrevSlide}
@@ -524,29 +524,29 @@ const FaceSwap = () => {
         {content.whatH2 && (
           <section id="what" className="bg-gradient-to-l from-gray-900 via-black to-gray-800 py-16 px-8 border-t border-b border-gray-700">
             <div className="max-w-7xl mx-auto">
-              <p className="text-3xl font-bold text-white mb-8">{content.whatH2}</p>
+              <h2 className="text-3xl font-bold text-white mb-8">{content.whatH2}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {content.whatH3_1 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <p className="text-xl font-semibold text-white">{content.whatH3_1}</p>
+                    <h3 className="text-xl font-semibold text-white">{content.whatH3_1}</h3>
                     <p className="text-gray-400 mt-4">{content.whatContent1}</p>
                   </div>
                 )}
                 {content.whatH3_2 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <p className="text-xl font-semibold text-white">{content.whatH3_2}</p>
+                    <h3 className="text-xl font-semibold text-white">{content.whatH3_2}</h3>
                     <p className="text-gray-400 mt-4">{content.whatContent2}</p>
                   </div>
                 )}
                 {content.whatH3_3 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <p className="text-xl font-semibold text-white">{content.whatH3_3}</p>
+                    <h3 className="text-xl font-semibold text-white">{content.whatH3_3}</h3>
                     <p className="text-gray-400 mt-4">{content.whatContent3}</p>
                   </div>
                 )}
                 {content.whatH3_4 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <p className="text-xl font-semibold text-white">{content.whatH3_4}</p>
+                    <h3 className="text-xl font-semibold text-white">{content.whatH3_4}</h3>
                     <p className="text-gray-400 mt-4">{content.whatContent4}</p>
                   </div>
                 )}
@@ -559,9 +559,9 @@ const FaceSwap = () => {
         {content.whyH2 && (
           <section id="why" className="bg-gradient-to-r from-gray-800 to-gray-700 py-16 px-8">
             <div className="max-w-7xlmx-auto">
-              <p className="text-3xl font-bold text-white mb-8 text-center">
+              <h2 className="text-3xl font-bold text-white mb-8 text-center">
                 {content.whyH2}
-              </p>
+              </h2>
               <AutoSlider
                 slides={[
                   // {
@@ -599,11 +599,11 @@ const FaceSwap = () => {
         {content.howH2 && (
           <section id="how" className="bg-gradient-to-br from-black to-gray-800 py-16 px-8 border-t border-gray-700">
             <div className="max-w-7xl mx-auto">
-              <p className="text-3xl font-bold text-white mb-8">{content.howH2}</p>
+              <h2 className="text-3xl font-bold text-white mb-8">{content.howH2}</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {content.howTitle1 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <p className="text-xl font-semibold text-white">{content.howTitle1}</p>
+                    <h3 className="text-xl font-semibold text-white">{content.howTitle1}</h3>
                     <p className="text-gray-400 mt-4">{content.howContent1}</p>
                   </div>
                 )}
@@ -645,9 +645,9 @@ const FaceSwap = () => {
           >
             <div className="max-w-7xl mx-auto">
               {/* Section Title */}
-              <p className="text-4xl font-extrabold text-center mb-12">
+              <h2 className="text-4xl font-extrabold text-center mb-12">
                 {content['userReviewH2']}
-              </p>
+              </h2>
 
               {/* Review Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -698,9 +698,9 @@ const FaceSwap = () => {
         {/* FAQ Section */}
         <section id="faq" className="bg-gradient-to-l from-gray-900 to-black py-16 px-8">
           <div className="max-w-7xl mx-auto">
-            <p className="text-3xl font-bold text-white text-center mb-8">
+            <h2 className="text-3xl font-bold text-white text-center mb-8">
               {content.faqHeader ? content.faqHeader : 'FAQ'}
-            </p>
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
                 const question = content[`faqQuestion${i}`];

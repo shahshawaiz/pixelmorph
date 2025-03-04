@@ -12,16 +12,7 @@ class MyDocument extends Document {
             {/* Google Tag Manager - Paste immediately after opening <head> */}
             <GoogleTagManager />
         </Head>
-        <body>
-          {/* Google Tag Manager (noscript) - Paste immediately after opening <body> */}
-          <noscript>
-            <iframe
-              src="https://www.googletagmanager.com/ns.html?id=GTM-TLFGXRTC"
-              height="0"
-              width="0"
-              style={{ display: 'none', visibility: 'hidden' }}
-            ></iframe>
-          </noscript>
+        <body>          
           <Main />
           <NextScript />
         </body>
