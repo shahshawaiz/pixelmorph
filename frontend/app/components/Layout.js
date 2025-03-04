@@ -35,11 +35,11 @@ const Layout = ({ children }) => {
               </div>
               <nav className="space-y-2">
                 <Link href="/" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Faceswap</Link>
-                {/* <Link href="/multifaceswap" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Multi-Faceswap</Link>
-                <Link href="/blogs" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Blogs</Link> */}
+                {/* <Link href="/multifaceswap" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Multi-Faceswap</Link> */}
                 <Link href="/about" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">About</Link>
                 <Link href="/privacy" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Privacy Policy</Link>
                 <Link href="/terms" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Terms of Service</Link>
+                <Link href="/blog" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Blogs</Link>
               </nav>
             </div>
           </div>
@@ -80,10 +80,10 @@ const Layout = ({ children }) => {
             {/* Column 2: More Links */}
             <div>
               <ul className="space-y-1 text-sm">
-                <li><Link href="/blogs" className="hover:text-white">Blog</Link></li>
                 <li><Link href="/about" className="hover:text-white">About Us</Link></li>
                 <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
                 <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
+                <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
               </ul>
             </div>
             {/* Column 3: Social Links & Language */}

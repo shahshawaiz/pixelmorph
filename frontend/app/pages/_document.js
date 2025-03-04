@@ -7,12 +7,10 @@ class MyDocument extends Document {
         <Head>
             <meta name="robots" content="noindex, nofollow" />
             <meta name="googlebot" content="noindex, nofollow" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
-            {/* Google Tag Manager - Paste immediately after opening <head> */}
-            <GoogleTagManager />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />            
         </Head>
         <body>          
+          <GoogleTagManager />
           <Main />
           <NextScript />
         </body>
