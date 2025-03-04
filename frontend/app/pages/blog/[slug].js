@@ -19,12 +19,21 @@ export async function getStaticPaths({ locales }) {
 }
 
 export async function getStaticProps({ params, locale }) {
-  // Fetch the specific post using its slug
-  const res = await fetch(`https://swapinfo.xyz/wp-json/wp/v2/posts?slug=${params.slug}`);
+  // Attempt to fetch the localized post only
+  const res = await fetch(
+    `https://swapinfo.xyz/wp-json/wp/v2/posts?slug=${params.slug}&lang=${locale}`
+  );
   const posts = await res.json();
 
-  if (!posts.length) {
-    return { notFound: true };
+  // If no post is found, return a 404 page
+  if (!posts || posts.length === 0) {
+    // redirect to blogs page with locale
+    return {
+      redirect: {
+        destination: `/${locale}/blog`,
+        permanent: false,
+      },
+    };
   }
 
   return {
@@ -34,33 +43,20 @@ export async function getStaticProps({ params, locale }) {
 }
 
 /**
- * Only inject default classes if they’re not already set.
- * We avoid converting newlines to <br/> so that the original WordPress formatting is preserved.
+ * A minimal formatter that performs only basic removals so as not to
+ * disturb the original WordPress markup too much.
  */
 const formatContent = (content) => {
   if (!content) return '';
-
-  // Add default styling classes to common HTML tags if they don't already have a class attribute.
-  // content = content.replace(/<(p)(?![^>]*\bclass\s*=)/gi, '<$1 class="text-white"');
-  // content = content.replace(/<(h[1-6])(?![^>]*\bclass\s*=)/gi, '<$1 class="text-white"');
-  // content = content.replace(/<(strong|b)(?![^>]*\bclass\s*=)/gi, '<$1 class="font-bold text-white"');
-  // content = content.replace(/<(em|i)(?![^>]*\bclass\s*=)/gi, '<$1 class="italic text-white"');
-
-  // replace carriage returns with <br> tags
-  // content = content.replace(/\r/g, '<br/>');
-
-  // remove <p> tags
+  // These replacements are just examples—adjust as needed.
   content = content.replace(/<p>/g, '');
-
-  // remove ol tags
+  content = content.replace(/<\/p>/g, '');
   content = content.replace(/<ol>/g, '');
-
-  // remove <ul> tags
-  content = content.replace(/<ul>/g, '<br>');
-
-  // remove li tags
+  content = content.replace(/<\/ol>/g, '');
+  content = content.replace(/<ul>/g, '');
+  content = content.replace(/<\/ul>/g, '');
   content = content.replace(/<li>/g, '');
-
+  content = content.replace(/<\/li>/g, '<br/>');
   return content;
 };
 

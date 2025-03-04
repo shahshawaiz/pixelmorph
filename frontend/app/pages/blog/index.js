@@ -4,7 +4,7 @@ import Layout from '../../components/Layout';
 
 export async function getStaticProps({ locale }) {
   // Fetch posts from the WordPress REST API
-  const res = await fetch('https://swapinfo.xyz/wp-json/wp/v2/posts');
+  const res = await fetch('https://swapinfo.xyz/wp-json/wp/v2/posts?lang=' + locale);
   const posts = await res.json();
 
   return {
