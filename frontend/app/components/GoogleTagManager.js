@@ -14,9 +14,8 @@ export default function GoogleTagManager() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-DRR7EVG49B', {
-            page_path: window.location.pathname,
-          });
+
+          gtag('config', 'G-DRR7EVG49B');
         `}
       </Script>
     </>
