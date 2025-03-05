@@ -2,6 +2,9 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
   render() {
+    // Retrieve the locale from the Next.js data (defaults to "en" if undefined)
+    const locale = this.props.__NEXT_DATA__.locale || 'en';
+
     return (
       <Html>
         <Head>
@@ -17,7 +20,7 @@ class MyDocument extends Document {
                 _iub.csConfiguration = {
                   "siteId": 3951141,
                   "cookiePolicyId": 24621994,
-                  "lang": "en",
+                  "lang": "${locale}",
                   "storage": {"useSiteId": true}
                 };
               `,
