@@ -24,7 +24,7 @@ services:
       context: ./frontend  # Specify the build context
       dockerfile: Dockerfile  # Specify the Dockerfile if it's named differently
     ports:
-      - "8080:3000" # fastAPI web server
+      - "443:3000" # fastAPI web server
     stdin_open: true  # Equivalent to -i
     tty: true         # Equivalent to -t
     env_file:
