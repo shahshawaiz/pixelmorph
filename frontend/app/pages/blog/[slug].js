@@ -49,14 +49,14 @@ export async function getStaticProps({ params, locale }) {
 const formatContent = (content) => {
   if (!content) return '';
   // These replacements are just examples—adjust as needed.
-  content = content.replace(/<p>/g, '');
-  content = content.replace(/<\/p>/g, '');
-  content = content.replace(/<ol>/g, '');
-  content = content.replace(/<\/ol>/g, '');
-  content = content.replace(/<ul>/g, '');
-  content = content.replace(/<\/ul>/g, '');
-  content = content.replace(/<li>/g, '');
-  content = content.replace(/<\/li>/g, '<br/>');
+  // content = content.replace(/<p>/g, '');
+  // content = content.replace(/<\/p>/g, '');
+  // content = content.replace(/<ol>/g, '');
+  // content = content.replace(/<\/ol>/g, '');
+  // content = content.replace(/<ul>/g, '');
+  // content = content.replace(/<\/ul>/g, '');
+  // content = content.replace(/<li>/g, '');
+  // content = content.replace(/<\/li>/g, '<br/>');
   return content;
 };
 
