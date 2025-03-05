@@ -2,7 +2,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
   render() {
-    // Retrieve the locale from the Next.js data (defaults to "en" if undefined)
+    // Retrieve the locale from Next.js data (defaulting to "en")
     const locale = this.props.__NEXT_DATA__.locale || 'en';
 
     return (
@@ -11,18 +11,21 @@ class MyDocument extends Document {
           <meta name="robots" content="noindex, nofollow" />
           <meta name="googlebot" content="noindex, nofollow" />
 
-          {/* Consent banner inline script */}
+          {/* Consent banner inline script with cookie check */}
           <script
             type="text/javascript"
             dangerouslySetInnerHTML={{
               __html: `
-                var _iub = _iub || [];
-                _iub.csConfiguration = {
-                  "siteId": 3951141,
-                  "cookiePolicyId": 24621994,
-                  "lang": "${locale}",
-                  "storage": {"useSiteId": true}
-                };
+                // Only configure Iubenda if the consent cookie is not already set
+                if (document.cookie.indexOf('iubenda_consent') === -1) {
+                  var _iub = _iub || [];
+                  _iub.csConfiguration = {
+                    "siteId": 3951141,
+                    "cookiePolicyId": 24621994,
+                    "lang": "${locale}",
+                    "storage": {"useSiteId": true}
+                  };
+                }
               `,
             }}
           />
