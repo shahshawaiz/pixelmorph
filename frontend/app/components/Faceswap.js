@@ -406,14 +406,17 @@ const FaceSwap = () => {
               </p>
             </div>
             <div className="md:w-1/2 flex justify-center">
-              <Image
-                src="/images/faceswap/IMAGE 1.webp"
-                alt={content.imageAlt || 'Face Swap Preview'}
-                width={600}
-                height={400}
-                className="rounded-lg shadow-2xl object-cover"
-                priority
-              />
+            <Image
+              src="/images/faceswap/IMAGE 1.webp"
+              alt={content.imageAlt || 'Face Swap Preview'}
+              width={600}
+              height={400}
+              className="rounded-lg shadow-2xl object-cover"
+              priority
+              sizes="(max-width: 600px) 100vw, 600px"
+              placeholder="blur" // Optional: shows a blur-up placeholder
+              blurDataURL="/images/placeholder.webp" // Optional: a very low-res version of your image
+            />
             </div>
           </div>
         </section>

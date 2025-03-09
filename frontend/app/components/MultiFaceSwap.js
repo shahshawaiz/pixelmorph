@@ -381,7 +381,11 @@ const MultiFaceSwap = () => {
                 height={400}
                 className="rounded-lg shadow-2xl object-cover"
                 priority
+                sizes="(max-width: 600px) 100vw, 600px"
+                placeholder="blur" // Optional: shows a blur-up placeholder
+                blurDataURL="/images/placeholder.webp" // Optional: a very low-res version of your image
               />
+                            
             </div>
           </div>
         </section>
