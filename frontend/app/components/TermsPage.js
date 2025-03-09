@@ -54,7 +54,7 @@ const TermsOfService = () => {
   return (
     <Layout>
       <Head>
-        <title>{content.termsTitle}</title>
+        <title>{content.termsTitle} - PixelMorph</title>
         <meta name="description" content={content.termsBody.replace(/(<([^>]+)>)/gi, "").slice(0, 150)} />
       </Head>
       <div className="bg-black pt-6">

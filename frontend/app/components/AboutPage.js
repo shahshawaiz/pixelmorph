@@ -62,7 +62,7 @@ const About = () => {
   return (
     <Layout>
       <Head>
-        <title>{content.aboutTitle}</title>
+        <title>{content.aboutTitle} - PixelMorph</title>
         <meta name="description" content={content.aboutBody.replace(/(<([^>]+)>)/gi, "").slice(0, 150)} />
       </Head>
       <div className="bg-black pt-6">

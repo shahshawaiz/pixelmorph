@@ -1,29 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Head from 'next/head';
-import {
-  Home,
-  Upload,
-  Info,
-  Lightbulb,
-  Wrench,
-  HelpCircle,
-  RefreshCcw,
-  Download,
-  Twitter,
-  Instagram,
-  Facebook,
-  Plus,
-  Menu,
-  X
-} from 'lucide-react';
+import Image from 'next/image';
+import { Upload, RefreshCcw, Download, Plus } from 'lucide-react';
 import Layout from '../components/Layout';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import LanguageSwitcher from './LanguageSwitcher';
-
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -31,13 +14,13 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 const DropZone = ({ title, subtitle, file, onUpload, inputRef, buttonText }) => {
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleDrag = (e) => {
+  const handleDrag = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(e.type === 'dragenter' || e.type === 'dragover');
-  };
+  }, []);
 
-  const handleDrop = (e) => {
+  const handleDrop = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -46,7 +29,7 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef, buttonText }) => 
       const event = { target: { files } };
       onUpload(event);
     }
-  };
+  }, [onUpload]);
 
   return (
     <div
@@ -64,6 +47,7 @@ const DropZone = ({ title, subtitle, file, onUpload, inputRef, buttonText }) => 
           alt="Preview"
           className="h-64 w-auto rounded-lg shadow-md"
           onLoad={(e) => URL.revokeObjectURL(e.target.src)}
+          loading="lazy"
         />
       ) : (
         <>
@@ -98,6 +82,7 @@ const FaqItem = ({ question, answer }) => {
       <button
         onClick={() => setOpen(!open)}
         className="w-full text-left focus:outline-none flex items-center justify-between"
+        aria-expanded={open}
       >
         <p className="text-xl font-semibold text-white">{question}</p>
         <Plus className={`w-6 h-6 text-white transition-transform ${open ? 'rotate-45' : ''}`} />
@@ -107,17 +92,16 @@ const FaqItem = ({ question, answer }) => {
   );
 };
 
+// AutoSlider component with arrow navigation
 const AutoSlider = ({ slides = [] }) => {
-  // For desktop, we show 3 slides at a time (adjust as needed)
   const visibleCount = 3;
-  // Create an extended slides array by appending clones of the first visibleCount slides
   const extendedSlides = [...slides, ...slides.slice(0, visibleCount)];
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
+  const slideWidth = 100 / visibleCount;
 
-  // Auto-scroll effect (pauses when hovering)
   useEffect(() => {
     if (!isHovering) {
       const interval = setInterval(() => {
@@ -127,8 +111,6 @@ const AutoSlider = ({ slides = [] }) => {
     }
   }, [isHovering]);
 
-  // When the transition ends, if we're in the cloned region,
-  // reset the index to 0 instantly (disabling transition briefly)
   const handleTransitionEnd = () => {
     if (currentIndex >= slides.length) {
       setTransitionEnabled(false);
@@ -137,24 +119,19 @@ const AutoSlider = ({ slides = [] }) => {
     }
   };
 
-  // Arrow navigation handlers
-  const goToNextSlide = () => {
+  const goToNextSlide = useCallback(() => {
     setCurrentIndex((prev) => prev + 1);
-  };
+  }, []);
 
-  const goToPrevSlide = () => {
+  const goToPrevSlide = useCallback(() => {
     if (currentIndex === 0) {
-      // Jump to the last original slide
       setTransitionEnabled(false);
       setCurrentIndex(slides.length - 1);
       setTimeout(() => setTransitionEnabled(true), 50);
     } else {
       setCurrentIndex((prev) => prev - 1);
     }
-  };
-
-  // On desktop each slide takes 100/visibleCount % width.
-  const slideWidth = 100 / visibleCount;
+  }, [currentIndex, slides.length]);
 
   return (
     <div
@@ -162,27 +139,27 @@ const AutoSlider = ({ slides = [] }) => {
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      {/* Slider Track */}
       <div
         className="flex"
         style={{
           transform: `translateX(-${currentIndex * slideWidth}%)`,
-          transition: transitionEnabled ? "transform 700ms ease-in-out" : "none",
+          transition: transitionEnabled ? 'transform 700ms ease-in-out' : 'none',
         }}
         onTransitionEnd={handleTransitionEnd}
       >
         {extendedSlides.map((slide, index) => (
           <div key={index} className="w-full md:w-1/3 flex-none p-4">
             <div className="bg-black border border-gray-800 rounded-lg shadow-xl overflow-hidden flex flex-col h-full">
-              {/* Upper Section: Image stretched to all edges */}
-              <div className="w-full">
-                <img
+              {/* Using Next.js Image for static images */}
+              <div className="relative w-full h-48">
+                <Image
                   src={slide.image}
                   alt={slide.heading || `Slide ${index + 1}`}
-                  className="w-full object-cover"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
                 />
               </div>
-              {/* Bottom Section: Text */}
               <div className="p-4">
                 {slide.heading && (
                   <h3 className="text-xl font-semibold text-white mb-2">
@@ -197,24 +174,20 @@ const AutoSlider = ({ slides = [] }) => {
       </div>
 
       {/* Navigation Arrows */}
-      {(
-        <>
-          <button
-            onClick={goToPrevSlide}
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-gray-600"
-            aria-label="Previous slide"
-          >
-            &larr;
-          </button>
-          <button
-            onClick={goToNextSlide}
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-gray-600"
-            aria-label="Next slide"
-          >
-            &rarr;
-          </button>
-        </>
-      )}
+      <button
+        onClick={goToPrevSlide}
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-gray-600"
+        aria-label="Previous slide"
+      >
+        &larr;
+      </button>
+      <button
+        onClick={goToNextSlide}
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-gray-600"
+        aria-label="Next slide"
+      >
+        &rarr;
+      </button>
     </div>
   );
 };
@@ -223,111 +196,6 @@ const FaceSwap = () => {
   const router = useRouter();
   const { locale } = router;
   const uploadSectionRef = useRef(null);
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Load localized content via SWR
-  const { data: apiData } = useSWR(`/api/loadSwrFaceswap?locale=${locale}`, fetcher);
-  console.log('SWR Data:', apiData);
-
-  // Fallback content if the API doesn't return anything
-  const fallbackContent = {
-    seoTitle: "Free AI Face Swap – Best Face Swapper Online",
-    metaDescription: "Create fun and unique photos with AI Face Swap. Swap faces seamlessly in seconds.",
-    keywords: "Face Swap, AI, Photo Editing, Online Tool",
-    structureBreadcrumblistName: "Home",
-    structureBreadcrumblistItem: "/",
-    structureWebsiteName: "Face Swap AI",
-    structureWebsiteUrl: "https://mydomain.com",
-    structureWebsiteHeadline: "AI Face Swap Online",
-    structureWebsiteDescription: "Swap faces instantly using advanced AI algorithms.",
-    structureWebsiteImage: "/images/faceswap/IMAGE 1.webp",
-    ogTitle: "AI Face Swap - Instantly Swap Faces",
-    ogDescription: "Use our free online tool to swap faces in your photos.",
-    ogUrl: "https://mydomain.com/faceswap",
-    ogImgAlt: "Face Swap Preview",
-    previewImageUrl: "/images/faceswap/IMAGE 1.webp",
-    twitterTitle: "AI Face Swap",
-    twitterDescription: "Easily swap faces online with AI.",
-    imageAlt: "Before and after face swap preview",
-
-    header: "Free AI Face Swapper",
-    introH1: "AI Face Swap",
-    introContent: "Seamlessly swap faces with our powerful AI-based technology.",
-    processingMessage: "Swapping faces with AI... please wait!",
-    successMessage: "Face swap completed successfully!",
-    errorMessage: "Face swap failed. Please try again.",
-
-    whatH2: "What AI Face Swapper Can Do?",
-    whatH3_1: "1. Instant Face Swap",
-    whatContent1: "Swap faces instantly with advanced AI technology in just seconds.",
-    whatH3_2: "2. Realistic and Seamless Face Swaps Made Easy",
-    whatContent2: "Experience effortless face swaps that produce natural-looking results.",
-    whatH3_3: "3. Make Photos Fun with AI FaceSwap",
-    whatContent3: "Have fun mixing faces for creative projects or comedic images.",
-    whatH3_4: "4. Transform Yourself into Famous Art",
-    whatContent4: "Try out templates to become famous artworks or unique characters.",
-
-    whyH2: "The Perfect Face Swapper For Everyone",
-    whyH3_1: "Easy to Use",
-    whyH3_2: "Fast & Accurate",
-    whyH3_3: "Safe & Private",
-    whyH3_4: "Free to Use",
-    whyContent1: "Effortlessly swap faces in any photo. Ideal for refreshing old pictures, trying a fun swap, or editing portraits.",
-    whyContent2: "A simple upload process ensures anyone can do it in seconds.",
-    whyContent3: "AI detection gives quick, realistic results for each face swap.",
-    whyContent4: "Your photos are never stored. We respect your privacy.",
-    whyContent5: "No hidden costs. Enjoy unlimited face swaps at zero cost.",
-
-    howH2: "How to Use Face Swap?",
-    howTitle1: "Upload Source Photo",
-    howContent1: "Select an image with a single face to use as the source.",
-    howTitle2: "Choose Target Photo",
-    howContent2: "Pick the face you want to swap into the source photo.",
-    howTitle3: "Face Swap Now",
-    howContent3: "Click 'Swap Faces' and download your newly swapped image.",
-
-    // Tools (new)
-    toolsH2: "All Online Photo & Video Editing Tools",
-    toolsH3_1: "Face Swap AI",
-    toolsContent1: "Easily swap any face in seconds with our advanced AI technology.",
-
-    faqHeader: "Frequently Asked Questions",
-    faqQuestion1: "What is AI Face Swap?",
-    faqAnswer1: "Face Swapper is an online tool that allows you to seamlessly replace one face with another in photos using AI.",
-    faqQuestion2: "How does Face Swapper work?",
-    faqAnswer2: "It analyzes the photo, identifies the faces, and blends them seamlessly with just a few clicks.",
-    faqQuestion3: "Is Face Swap free?",
-    faqAnswer3: "Yes, you can use Face Swap for free to create fun, realistic swaps in seconds.",
-    faqQuestion4: "Does it work on all photos?",
-    faqAnswer4: "As long as the faces are clearly visible, the tool can swap them. Well-lit, front-facing images work best.",
-    faqQuestion5: "Is face swapper online safe?",
-    faqAnswer5: "We prioritize security and do not store your images on our servers.",
-    faqQuestion6: "Can I swap faces between animals and humans?",
-    faqAnswer6: "Yes, but results may vary depending on image clarity and face angles.",
-    faqQuestion7: "Does AI FaceSwap Support Gender Swap?",
-    faqAnswer7: "Yes, you can swap faces regardless of gender. The AI handles all facial mappings.",
-    faqQuestion8: "How to achieve the best results?",
-    faqAnswer8: "Use clear, high-resolution images with front-facing faces.",
-    faqQuestion9: "How does AI face swapper handle multiple faces?",
-    faqAnswer9: "Currently, the tool focuses on one face at a time for best results.",
-    faqQuestion10: "What file formats are supported?",
-    faqAnswer10: "We support PNG, JPG, and WEBP up to 50MB.",
-
-    // Reviews placeholders
-    'faceswap.user.review.h2': "User Reviews",
-    'faceswap.user.review.name.1': "John Doe",
-    'faceswap.user.review.1': "Amazing results! The AI swaps are super realistic.",
-    'faceswap.user.review.name.2': "Jane Smith",
-    'faceswap.user.review.2': "I had a blast swapping faces with my friends’ photos.",
-    'faceswap.user.review.name.3': "Carlos M.",
-    'faceswap.user.review.3': "Easy to use and fast. Love this tool!",
-    'faceswap.user.review.name.4': "Emily R.",
-    'faceswap.user.review.4': "Best face swapper out there. Highly recommended!"
-  };
-
-  const content = apiData?.data || fallbackContent;
-
-  // Face swap states
   const [baseFile, setBaseFile] = useState(null);
   const [targetFile, setTargetFile] = useState(null);
   const [outputFile, setOutputFile] = useState(null);
@@ -335,6 +203,106 @@ const FaceSwap = () => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  // Load localized content via SWR
+  const { data: apiData } = useSWR(`/api/loadSwrFaceswap?locale=${locale}`, fetcher);
+  
+  const fallbackContent = {
+    seoTitle: 'Free AI Face Swap – Best Face Swapper Online',
+    metaDescription: 'Create fun and unique photos with AI Face Swap. Swap faces seamlessly in seconds.',
+    keywords: 'Face Swap, AI, Photo Editing, Online Tool',
+    structureBreadcrumblistName: 'Home',
+    structureBreadcrumblistItem: '/',
+    structureWebsiteName: 'Face Swap AI',
+    structureWebsiteUrl: 'https://mydomain.com',
+    structureWebsiteHeadline: 'AI Face Swap Online',
+    structureWebsiteDescription: 'Swap faces instantly using advanced AI algorithms.',
+    structureWebsiteImage: '/images/faceswap/IMAGE 1.webp',
+    ogTitle: 'AI Face Swap - Instantly Swap Faces',
+    ogDescription: 'Use our free online tool to swap faces in your photos.',
+    ogUrl: 'https://mydomain.com/faceswap',
+    ogImgAlt: 'Face Swap Preview',
+    previewImageUrl: '/images/faceswap/IMAGE 1.webp',
+    twitterTitle: 'AI Face Swap',
+    twitterDescription: 'Easily swap faces online with AI.',
+    imageAlt: 'Before and after face swap preview',
+
+    introH1: 'AI Face Swap',
+    introContent: 'Seamlessly swap faces with our powerful AI-based technology.',
+    processingMessage: 'Swapping faces with AI... please wait!',
+    successMessage: 'Face swap completed successfully!',
+    errorMessage: 'Face swap failed. Please try again.',
+    
+    engineDiv1Instruction: 'Upload a source image (max 50MB)',
+    engineDiv2Instruction: 'Upload a target image (max 50MB)',
+    engineDiv1Button: 'Choose Image',
+    engineRunButton: 'Swap Faces',
+
+    whatH2: 'What AI Face Swapper Can Do?',
+    whatH3_1: '1. Instant Face Swap',
+    whatContent1: 'Swap faces instantly with advanced AI technology in just seconds.',
+    whatH3_2: '2. Realistic and Seamless Face Swaps Made Easy',
+    whatContent2: 'Experience effortless face swaps that produce natural-looking results.',
+    whatH3_3: '3. Make Photos Fun with AI FaceSwap',
+    whatContent3: 'Have fun mixing faces for creative projects or comedic images.',
+    whatH3_4: '4. Transform Yourself into Famous Art',
+    whatContent4: 'Try out templates to become famous artworks or unique characters.',
+
+    whyH2: 'The Perfect Face Swapper For Everyone',
+    whyH3_1: 'Easy to Use',
+    whyH3_2: 'Fast & Accurate',
+    whyH3_3: 'Safe & Private',
+    whyContent1: 'Effortlessly swap faces in any photo. Ideal for refreshing old pictures or editing portraits.',
+    whyContent2: 'A simple upload process ensures anyone can do it in seconds.',
+    whyContent3: 'Your photos are never stored. We respect your privacy.',
+
+    howH2: 'How to Use Face Swap?',
+    howTitle1: 'Upload Source Photo',
+    howContent1: 'Select an image with a single face to use as the source.',
+    howTitle2: 'Choose Target Photo',
+    howContent2: 'Pick the face you want to swap into the source photo.',
+    howTitle3: 'Face Swap Now',
+    howContent3: "Click 'Swap Faces' and download your newly swapped image.",
+
+    toolsH2: 'All Online Photo & Video Editing Tools',
+    toolsH3_1: 'Face Swap AI',
+    toolsContent1: 'Easily swap any face in seconds with our advanced AI technology.',
+
+    faqHeader: 'Frequently Asked Questions',
+    faqQuestion1: 'What is AI Face Swap?',
+    faqAnswer1: 'Face Swapper is an online tool that allows you to seamlessly replace one face with another in photos using AI.',
+    faqQuestion2: 'How does Face Swapper work?',
+    faqAnswer2: 'It analyzes the photo, identifies the faces, and blends them seamlessly with just a few clicks.',
+    faqQuestion3: 'Is Face Swap free?',
+    faqAnswer3: 'Yes, you can use Face Swap for free to create fun, realistic swaps in seconds.',
+    faqQuestion4: 'Does it work on all photos?',
+    faqAnswer4: 'As long as the faces are clearly visible, the tool can swap them. Well-lit, front-facing images work best.',
+    faqQuestion5: 'Is face swapper online safe?',
+    faqAnswer5: 'We prioritize security and do not store your images on our servers.',
+    faqQuestion6: 'Can I swap faces between animals and humans?',
+    faqAnswer6: 'Yes, but results may vary depending on image clarity and face angles.',
+    faqQuestion7: 'Does AI FaceSwap Support Gender Swap?',
+    faqAnswer7: 'Yes, you can swap faces regardless of gender. The AI handles all facial mappings.',
+    faqQuestion8: 'How to achieve the best results?',
+    faqAnswer8: 'Use clear, high-resolution images with front-facing faces.',
+    faqQuestion9: 'How does AI face swapper handle multiple faces?',
+    faqAnswer9: 'Currently, the tool focuses on one face at a time for best results.',
+    faqQuestion10: 'What file formats are supported?',
+    faqAnswer10: 'We support PNG, JPG, and WEBP up to 50MB.',
+
+    userReviewH2: 'User Reviews',
+    userReviewName1: 'John Doe',
+    userReview1: 'Amazing results! The AI swaps are super realistic.',
+    userReviewName2: 'Jane Smith',
+    userReview2: 'I had a blast swapping faces with my friends’ photos.',
+    userReviewName3: 'Carlos M.',
+    userReview3: 'Easy to use and fast. Love this tool!',
+    userReviewName4: 'Emily R.',
+    userReview4: 'Best face swapper out there. Highly recommended!'
+  };
+
+  const content = apiData?.data || fallbackContent;
+
+  // Face swap state handlers
   const baseInputRef = useRef(null);
   const targetInputRef = useRef(null);
 
@@ -356,7 +324,7 @@ const FaceSwap = () => {
   const runFaceSwap = async () => {
     if (!baseFile || !targetFile) return;
     setLoading(true);
-    setMessage(content.processingMessage || 'Processing your face swap...');
+    setMessage(content.processingMessage);
     const formData = new FormData();
     formData.append('source', baseFile);
     formData.append('target', targetFile);
@@ -369,9 +337,9 @@ const FaceSwap = () => {
         throw new Error('No output file received');
       }
       setOutputFile(`/api/assets?filename=${response.data.output_file}`);
-      setMessage(content.successMessage || 'Face swap completed successfully!');
+      setMessage(content.successMessage);
     } catch (err) {
-      setError(content.errorMessage || 'Face swap failed. Please try again.');
+      setError(content.errorMessage);
       console.error('Face swap error:', err);
     } finally {
       setLoading(false);
@@ -389,7 +357,7 @@ const FaceSwap = () => {
   return (
     <Layout>
       <Head>
-        <title>{content.seoTitle}</title>
+        <title>{content.seoTitle} - PixelMorph</title>
         <meta name="title" content={content.seoTitle} />
         <meta name="description" content={content.metaDescription} />
         <meta name="keywords" content={content.keywords} />
@@ -414,24 +382,21 @@ const FaceSwap = () => {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": content.structureWebsiteName,
-              "url": content.structureWebsiteUrl,
-              "headline": content.structureWebsiteHeadline,
-              "description": content.structureWebsiteDescription,
-              "image": content.structureWebsiteImage || content.previewImageUrl
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: content.structureWebsiteName,
+              url: content.structureWebsiteUrl,
+              headline: content.structureWebsiteHeadline,
+              description: content.structureWebsiteDescription,
+              image: content.structureWebsiteImage || content.previewImageUrl,
             }),
           }}
         />
       </Head>
-
-      {/* Main Content Container */}
-      <div className="">
+      <main>
         {/* HERO SECTION */}
         <section id="hero" className="bg-gradient-to-br from-gray-900 via-black to-gray-800 py-16 px-8 border-b border-gray-700">
           <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-8">
-            {/* Left: Text */}
             <div className="md:w-1/2">
               <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
                 {content.introH1}
@@ -440,23 +405,25 @@ const FaceSwap = () => {
                 {content.introContent}
               </p>
             </div>
-            {/* Right: Image */}
             <div className="md:w-1/2 flex justify-center">
-              <img
+              <Image
                 src="/images/faceswap/IMAGE 1.webp"
                 alt={content.imageAlt || 'Face Swap Preview'}
-                className="rounded-lg shadow-2xl w-full h-auto object-cover"
+                width={600}
+                height={400}
+                className="rounded-lg shadow-2xl object-cover"
+                priority
               />
             </div>
           </div>
         </section>
 
-        {/* Optional Breadcrumb */}
+        {/* Breadcrumb */}
         {content.structureBreadcrumblistName && content.structureBreadcrumblistItem && (
           <div className="max-w-5xl mx-auto px-8 mt-4 text-sm text-gray-500">
-            <a href={content.structureBreadcrumblistItem}>
+            <Link href={content.structureBreadcrumblistItem}>
               {content.structureBreadcrumblistName}
-            </a>
+            </Link>
           </div>
         )}
 
@@ -498,6 +465,7 @@ const FaceSwap = () => {
                 src={outputFile}
                 alt="Face Swap Result"
                 className="h-80 w-auto rounded-lg shadow-lg object-contain mx-auto"
+                loading="lazy"
               />
               <div className="flex justify-center space-x-6">
                 <button
@@ -555,25 +523,15 @@ const FaceSwap = () => {
           </section>
         )}
 
-        {/* WHY Section (replaced with a slider) */}
+        {/* WHY Section with Slider */}
         {content.whyH2 && (
           <section id="why" className="bg-gradient-to-r from-gray-800 to-gray-700 py-16 px-8">
-            <div className="max-w-7xlmx-auto">
+            <div className="max-w-7xl mx-auto">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">
                 {content.whyH2}
               </h2>
               <AutoSlider
                 slides={[
-                  // {
-                  //   heading: content.whyH3_1,
-                  //   text: content.whyContent1,
-                  //   image: '/images/faceswap/IMAGE 2.webp',
-                  // },
-                  // {
-                  //   heading: content.whyH3_2,
-                  //   text: content.whyContent2,
-                  //   image: '/images/faceswap/IMAGE 3.webp',
-                  // },
                   {
                     heading: content.whyH3_1,
                     text: content.whyContent1,
@@ -595,7 +553,7 @@ const FaceSwap = () => {
           </section>
         )}
 
-        {/* HOW-TO Section */}
+        {/* HOW Section */}
         {content.howH2 && (
           <section id="how" className="bg-gradient-to-br from-black to-gray-800 py-16 px-8 border-t border-gray-700">
             <div className="max-w-7xl mx-auto">
@@ -609,13 +567,13 @@ const FaceSwap = () => {
                 )}
                 {content.howTitle2 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <p className="text-xl font-semibold text-white">{content.howTitle2}</p>
+                    <h3 className="text-xl font-semibold text-white">{content.howTitle2}</h3>
                     <p className="text-gray-400 mt-4">{content.howContent2}</p>
                   </div>
                 )}
                 {content.howTitle3 && (
                   <div className="bg-black border border-gray-800 p-6 rounded-lg">
-                    <p className="text-xl font-semibold text-white">{content.howTitle3}</p>
+                    <h3 className="text-xl font-semibold text-white">{content.howTitle3}</h3>
                     <p className="text-gray-400 mt-4">{content.howContent3}</p>
                   </div>
                 )}
@@ -624,11 +582,11 @@ const FaceSwap = () => {
           </section>
         )}
 
-        {/* TOOLS Section (new) */}
+        {/* TOOLS Section */}
         {content.toolsH2 && (
           <section id="tools" className="bg-gradient-to-br from-black to-gray-800 py-16 px-8 border-t border-gray-700">
             <div className="max-w-7xl mx-auto">
-              <p className="text-3xl font-bold text-white mb-8">{content.toolsH2}</p>
+              <h2 className="text-3xl font-bold text-white mb-8">{content.toolsH2}</h2>
               <p className="text-xl font-semibold text-white mb-4">
                 {content.toolsH3_1}
               </p>
@@ -637,50 +595,25 @@ const FaceSwap = () => {
           </section>
         )}
 
-        {/* REVIEWS Section (improved styling) */}
-        {content['userReviewH2'] && (
-          <section
-            id="reviews"
-            className="py-20 px-4 bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100"
-          >
+        {/* REVIEWS Section */}
+        {content.userReviewH2 && (
+          <section id="reviews" className="py-20 px-4 bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100">
             <div className="max-w-7xl mx-auto">
-              {/* Section Title */}
               <h2 className="text-4xl font-extrabold text-center mb-12">
-                {content['userReviewH2']}
+                {content.userReviewH2}
               </h2>
-
-              {/* Review Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="
-                      relative
-                      flex flex-col
-                      p-8
-                      bg-gray-900
-                      rounded-xl
-                      shadow-md
-                      hover:shadow-xl
-                      transition
-                      duration-300
-                      transform
-                      hover:-translate-y-1
-                      border-l-4
-                      border-indigo-500
-                    "
+                    className="relative flex flex-col p-8 bg-gray-900 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border-l-4 border-indigo-500"
                   >
-                    {/* Reviewer Name */}
                     <div className="mb-2 text-xl font-semibold text-indigo-400">
                       {content[`userReviewName${i}`]}
                     </div>
-
-                    {/* Review Text */}
                     <p className="text-gray-300 italic">
                       “{content[`userReview${i}`]}”
                     </p>
-
-                    {/* Optional Decorative Icon */}
                     <svg
                       className="absolute top-4 right-4 w-8 h-8 text-gray-600 opacity-40"
                       fill="currentColor"
@@ -699,7 +632,7 @@ const FaceSwap = () => {
         <section id="faq" className="bg-gradient-to-l from-gray-900 to-black py-16 px-8">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-white text-center mb-8">
-              {content.faqHeader ? content.faqHeader : 'FAQ'}
+              {content.faqHeader || 'FAQ'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
@@ -712,7 +645,7 @@ const FaceSwap = () => {
             </div>
           </div>
         </section>
-      </div>
+      </main>
 
       {/* Loading Overlay */}
       {loading && (

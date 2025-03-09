@@ -1,19 +1,37 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Meta from '../components/Meta';
 
 class MyDocument extends Document {
+  static async getInitialProps(ctx) {
+    // Get the initial props from Next.js
+    const initialProps = await Document.getInitialProps(ctx);
+    // Retrieve the locale from the context (defaulting to "en")
+    const locale = ctx?.locale || 'en';
+    
+    // Fetch meta data from Strapi.
+    // Make sure to set STRAPI_API_URL in your environment variables.
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/faceswap?locale=${locale}`
+    );
+    const metaData = await res.json();
+    
+    console.log(metaData?.data?.seoTitle);
+    return { ...initialProps, metaData, locale };
+  }
+
   render() {
-    // Retrieve the locale from Next.js data (defaulting to "en")
-    const locale = this.props.__NEXT_DATA__.locale || 'en';
+    const { locale, metaData } = this.props;
 
     return (
-      <Html>
+      <Html lang={locale}>
         <Head>
-          {/* Consent banner inline script with cookie check */}
+          {/* Inject the dynamic meta data from Strapi */}
+          <Meta content={metaData?.data} />          
+
+          {/* Inline Iubenda configuration script (critical for cookie consent) */}
           <script
-            type="text/javascript"
             dangerouslySetInnerHTML={{
               __html: `
-                // Only configure Iubenda if the consent cookie is not already set
                 if (document.cookie.indexOf('iubenda_consent') === -1) {
                   var _iub = _iub || [];
                   _iub.csConfiguration = {
@@ -26,16 +44,13 @@ class MyDocument extends Document {
               `,
             }}
           />
+          {/* Load Iubenda scripts with async/defer to reduce render-blocking */}
+          <script src="https://cs.iubenda.com/autoblocking/3951141.js" defer></script>
+          <script src="https://cdn.iubenda.com/cs/gpp/stub.js" defer></script>
+          <script src="https://cdn.iubenda.com/cs/iubenda_cs.js" charSet="UTF-8" async defer></script>
 
-          <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/3951141.js"></script>
-          <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
-          <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charSet="UTF-8" async></script>
-
-          {/* Google Analytics script inserted directly in the head */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-DRR7EVG49B"
-          ></script>
+          {/* Google Analytics: load asynchronously */}
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRR7EVG49B"></script>
           <script
             dangerouslySetInnerHTML={{
               __html: `

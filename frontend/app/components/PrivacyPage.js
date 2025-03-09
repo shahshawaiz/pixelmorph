@@ -55,7 +55,7 @@ const PrivacyPolicy = () => {
   return (
     <Layout>
       <Head>
-        <title>{content.privacyTitle}</title>
+        <title>{content.privacyTitle} - PixelMorph</title>
         <meta name="description" content={content.privacyBody.replace(/(<([^>]+)>)/gi, "").slice(0, 150)} />
       </Head>
       <div className="bg-black pt-6">
