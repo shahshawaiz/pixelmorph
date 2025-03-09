@@ -8,14 +8,25 @@ class MyDocument extends Document {
     // Retrieve the locale from the context (defaulting to "en")
     const locale = ctx?.locale || 'en';
     
-    // Fetch meta data from Strapi.
-    // Make sure to set STRAPI_API_URL in your environment variables.
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/faceswap?locale=${locale}`
-    );
-    const metaData = await res.json();
-    
-    console.log(metaData?.data?.seoTitle);
+    let metaData = { data: {} }; // fallback meta data
+
+    try {
+      // Fetch meta data from Strapi.
+      // Make sure to set NEXT_PUBLIC_STRAPI_API_URL in your environment variables.
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/faceswap?locale=${locale}`
+      );
+      // Only update metaData if the response is successful.
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      metaData = await res.json();
+      console.log(metaData?.data?.seoTitle);
+    } catch (error) {
+      console.error("Error fetching meta data from Strapi:", error);
+      // You can customize the fallback metaData object here if desired.
+    }
+
     return { ...initialProps, metaData, locale };
   }
 

@@ -583,14 +583,30 @@ const FaceSwap = () => {
         )}
 
         {/* TOOLS Section */}
-        {content.toolsH2 && (
+        {(content.toolsH2 || content.faceswapToolsH2 || content.multiFaceswapToolsH2) && (
           <section id="tools" className="bg-gradient-to-br from-black to-gray-800 py-16 px-8 border-t border-gray-700">
             <div className="max-w-7xl mx-auto">
-              <h2 className="text-3xl font-bold text-white mb-8">{content.toolsH2}</h2>
-              <p className="text-xl font-semibold text-white mb-4">
-                {content.toolsH3_1}
-              </p>
-              <p className="text-gray-400">{content.toolsContent1}</p>
+              {content.faceswapToolsH2 && (
+                <h2 className="text-3xl font-bold text-white mb-8">{content.faceswapToolsH2}</h2>
+              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {content.faceswapToolsH2 && (
+                  <Link href="/" passHref>
+                    <div className="cursor-pointer">
+                      <p className="text-xl font-semibold text-white mb-2">{content.faceswapToolsH3_1}</p>
+                      <p className="text-gray-400">{content.faceswapToolsContent1}</p>
+                    </div>
+                  </Link>
+                )}
+                {content.multiFaceswapToolsH2 && (
+                  <Link href="/multifaceswap" passHref>
+                    <div className="cursor-pointer">
+                      <p className="text-xl font-semibold text-white mb-2">{content.multiFaceswapToolsH3_1}</p>
+                      <p className="text-gray-400">{content.multiFaceswapToolsContent1}</p>
+                    </div>
+                  </Link>
+                )}
+              </div>
             </div>
           </section>
         )}

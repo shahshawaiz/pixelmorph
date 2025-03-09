@@ -35,11 +35,11 @@ const Layout = ({ children }) => {
               </div>
               <nav className="space-y-2">
                 <Link href="/" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Faceswap</Link>
-                {/* <Link href="/multifaceswap" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Multi-Faceswap</Link> */}
-                <Link href="/about" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">About</Link>
+                <Link href="/multifaceswap" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Multi-Faceswap</Link>
+                <Link href="/blog" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Blogs</Link>
                 <Link href="/privacy" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Privacy Policy</Link>
                 <Link href="/terms" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Terms of Service</Link>
-                <Link href="/blog" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">Blogs</Link>
+                <Link href="/about" className="block px-4 py-2 rounded hover:bg-cyan-600 transition">About</Link>
               </nav>
             </div>
           </div>
@@ -70,23 +70,56 @@ const Layout = ({ children }) => {
 
         {/* Footer */}
         <footer className="bg-gradient-to-r from-gray-900 to-black text-gray-400 py-8">
-          <div className="max-w-6xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="max-w-6xl mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Column 1: Logo & Tagline */}
             <div>
               <img src="/logo.png" alt="Pixelmorph Logo" className="h-10 w-auto mb-2" />
               <p className="text-sm text-gray-300">Pixelmorph</p>
               <p className="text-sm text-gray-500 mt-2">© {new Date().getFullYear()} Pixelmorph. All rights reserved.</p>
             </div>
-            {/* Column 2: More Links */}
+            {/* Column 2: Tools */}
             <div>
+              <h3 className="text-xl font-bold text-white mb-2">Tools</h3>
               <ul className="space-y-1 text-sm">
-                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
-                <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
-                <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-                <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
+                <li>
+                  <Link href="/" className="hover:text-white">
+                    Faceswap
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/multifaceswap" className="hover:text-white">
+                    Multi-Faceswap
+                  </Link>
+                </li>
+              </ul>
+            </div>            
+            {/* Column 3: More Links */}
+            <div>
+              <h3 className="text-xl font-bold text-white mb-2">Sitemap</h3>
+              <ul className="space-y-1 text-sm">
+                <li>
+                  <Link href="/about" className="hover:text-white">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-white">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy" className="hover:text-white">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/blog" className="hover:text-white">
+                    Blog
+                  </Link>
+                </li>
               </ul>
             </div>
-            {/* Column 3: Social Links & Language */}
+            {/* Column 4: Social Links & Language */}
             <div>
               <p className="font-semibold mb-2 text-white">Follow Us</p>
               <div className="flex space-x-4 mb-4">
@@ -107,6 +140,7 @@ const Layout = ({ children }) => {
             </div>
           </div>
         </footer>
+
       </div>
     </div>
   );

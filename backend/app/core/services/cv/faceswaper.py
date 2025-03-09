@@ -208,10 +208,13 @@ async def detect_faces_from_image(img, input_path: Path) -> Tuple[List, List[Dic
     """
     Expects 'img' to be a NumPy array (loaded via cv2.imread).
     Returns a tuple (detected_faces, face_boxes) where face_boxes is a list
-    of dictionaries (each with keys: x, y, width, height) that are JSON serializable.
+    of dictionaries (each with keys: x, y, width, height) that are normalized
+    relative to the image dimensions (values between 0 and 1).
     """
-    detected_faces = APP_INSIGHTFACE.get(img)  # Adjust as needed for your model.
+    detected_faces = APP_INSIGHTFACE.get(img)
     face_boxes = []
+    img_height, img_width = img.shape[:2]
+
     for face in detected_faces:
         if isinstance(face, dict):
             bbox = face.get('bbox')
@@ -220,16 +223,35 @@ async def detect_faces_from_image(img, input_path: Path) -> Tuple[List, List[Dic
             bbox_list = [float(x) for x in bbox]
         else:
             bbox_list = [float(face.x), float(face.y), float(face.width), float(face.height)]
-        if len(bbox_list) >= 4:
-            face_boxes.append({
-                "x": bbox_list[0],
-                "y": bbox_list[1],
-                "width": bbox_list[2],
-                "height": bbox_list[3]
-            })
+        
+        if len(bbox_list) < 4:
+            continue
+        
+        # Check if the bounding box is in the format [x1, y1, x2, y2].
+        # We assume that if the third or fourth value is > 1, the coordinates are absolute.
+        if bbox_list[2] > 1 or bbox_list[3] > 1:
+            # Assume bbox is in [x1, y1, x2, y2]
+            x1, y1, x2, y2 = bbox_list
+            x = x1
+            y = y1
+            w = x2 - x1
+            h = y2 - y1
+        else:
+            # Otherwise, assume bbox is in [x, y, width, height]
+            x, y, w, h = bbox_list
+        
+        normalized_box = {
+            "x": x / img_width,
+            "y": y / img_height,
+            "width": w / img_width,
+            "height": h / img_height
+        }
+        face_boxes.append(normalized_box)
+    
     # Clean up the temporary file.
     try:
         input_path.unlink()
     except Exception:
         pass
+
     return detected_faces, face_boxes

@@ -163,7 +163,6 @@ def setup_app():
                 if path.exists():
                     path.unlink()
 
-
     @app.post("/facedetect")
     async def face_detect(file: UploadFile = File(...)):
         """
@@ -179,18 +178,31 @@ def setup_app():
             img = cv2.imread(str(input_path))
             if img is None:
                 raise HTTPException(status_code=400, detail="Invalid image file")
-            # Run face detection.
+            
+            # Run face detection (returns normalized boxes)
             _, face_boxes = await detect_faces_from_image(img, input_path)
+            
+            # Get image dimensions to convert normalized values back to pixels.
+            img_height, img_width = img.shape[:2]
+            
             # Draw boxes and face numbers on a copy of the image.
             annotated_img = img.copy()
             for i, box in enumerate(face_boxes):
-                x = int(box["x"])
-                y = int(box["y"])
-                w = int(box["width"])
-                h = int(box["height"])
+                # Convert normalized coordinates to pixel values.
+                x = int(box["x"] * img_width)
+                y = int(box["y"] * img_height)
+                w = int(box["width"] * img_width)
+                h = int(box["height"] * img_height)
                 cv2.rectangle(annotated_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                cv2.putText(annotated_img, str(i + 1), (x, y - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                cv2.putText(
+                    annotated_img, 
+                    str(i + 1), 
+                    (x, y - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 
+                    0.9, 
+                    (0, 255, 0), 
+                    2
+                )
             annotated_filename = f"{session_id}_annotated.png"
             annotated_path = ASSETS_DIR / annotated_filename
             cv2.imwrite(str(annotated_path), annotated_img)
@@ -198,6 +210,7 @@ def setup_app():
         except Exception as e:
             traceback.print_exc()
             raise HTTPException(status_code=500, detail="Face detection error: " + str(e))
+
         
     @app.post("/faceshape-detector")
     async def faceshape_detector(file: UploadFile = File(...)):

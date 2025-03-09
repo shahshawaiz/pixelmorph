@@ -116,18 +116,20 @@ const KEY_MAP = {
   'multi.faceswap.faq.h3.10': 'faqQuestion10',
   'multi.faceswap.faq.content.10': 'faqAnswer10',
 
-  // --- NEW KEYS ---
+  // Page controls
+  'faceswap.engine.div1.instruction': 'engineDiv1Instruction',
+  'faceswap.engine.div1.button': 'engineDiv1Button',
+  'faceswap.engine.div2.instruction': 'engineDiv2Instruction',
+  'faceswap.engine.div2.button': 'engineDiv2Button',
+  'faceswap.engine.run.button': 'engineRunButton',
+
+  // Common Pages
   'faceswap.about.title': 'aboutTitle',
   'faceswap.about.body': 'aboutBody',
   'faceswap.privacy.title': 'privacyTitle',
   'faceswap.privacy.body': 'privacyBody',
   'faceswap.terms.title': 'termsTitle',
-  'faceswap.terms.body': 'termsBody',
-  'faceswap.engine.div1.instruction': 'engineDiv1Instruction',
-  'faceswap.engine.div1.button': 'engineDiv1Button',
-  'faceswap.engine.div2.instruction': 'engineDiv2Instruction',
-  'faceswap.engine.div2.button': 'engineDiv2Button',
-  'faceswap.engine.run.button': 'engineRunButton'
+  'faceswap.terms.body': 'termsBody'
 };
 
 /**
