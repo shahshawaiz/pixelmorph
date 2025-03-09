@@ -93,7 +93,7 @@ const Meta = ({ content = {} }) => {
         }
       />
 
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="favicon.ico"/>
     </>
   );
 };
