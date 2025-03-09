@@ -34,8 +34,6 @@ const Meta = ({ content = {} }) => {
 
   return (
     <>
-      <link rel="icon" href="/favicon.ico" />
-
       {/* Basic SEO */}
       <title>{mergedContent.seoTitle} - PixelMorph</title>
       <meta name="title" content={mergedContent.seoTitle} />
@@ -86,6 +84,8 @@ const Meta = ({ content = {} }) => {
           mergedContent.structureWebsiteImage || mergedContent.previewImageUrl
         }
       />
+
+      <link rel="icon" href="/favicon.ico" />
     </>
   );
 };
