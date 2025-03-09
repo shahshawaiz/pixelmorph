@@ -31,11 +31,19 @@ const defaultContent = {
 const Meta = ({ content = {} }) => {
   // Merge defaults with user-provided content
   const mergedContent = { ...defaultContent, ...content };
+  
+  // get seo title from content (can be array if so, get first item)
+  if (Array.isArray(mergedContent.seoTitle)) {
+    mergedContent.seoTitle = mergedContent.seoTitle[0];
+  }
+
 
   return (
     <>
       {/* Basic SEO */}
-      <title>{mergedContent.seoTitle} - PixelMorph</title>
+      <title>{mergedContent.seoTitle}</title>
+
+
       <meta name="title" content={mergedContent.seoTitle} />
       <meta name="description" content={mergedContent.metaDescription} />
       <meta name="keywords" content={mergedContent.keywords} />
