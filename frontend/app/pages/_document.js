@@ -52,6 +52,7 @@ class MyDocument extends Document {
             Note: External Iubenda and Google Analytics scripts have been moved 
             to _app.js using Next.js <Script> for better deferral and reduced blocking.
           */}
+          <link rel="icon" href="https://faceswaponline.ai/logo.png" />
         </Head>
         <body>
           <Main />
