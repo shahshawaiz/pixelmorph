@@ -10,6 +10,13 @@ export async function getStaticProps({ locale }) {
   );
   const posts = await res.json();
 
+  // Optionally, you can handle an empty posts list:
+  // if (!posts || posts.length === 0) {
+  //   return {
+  //     notFound: true,
+  //   };
+  // }
+
   return {
     props: { posts },
     revalidate: 10,
@@ -44,38 +51,39 @@ export default function Blogs({ posts }) {
                   key={post.id}
                   href={`/blog/${post.slug}`}
                   locale={locale}
-                  className="bg-gray-800 rounded overflow-hidden shadow hover:shadow-lg transition-shadow"
                 >
-                  {/* Image at the top of the card */}
-                  {thumbnail && (
-                    <div className="relative w-full h-48">
-                      <Image
-                        src={thumbnail}
-                        alt={post.title.rendered}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
+                  <a className="bg-gray-800 rounded overflow-hidden shadow hover:shadow-lg transition-shadow">
+                    {/* Image at the top of the card */}
+                    {thumbnail && (
+                      <div className="relative w-full h-48">
+                        <Image
+                          src={thumbnail}
+                          alt={post.title.rendered}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
 
-                  {/* Card content */}
-                  <div className="p-4">
-                    <h2
-                      className="text-xl font-bold text-white mb-2"
-                      dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                    />
-                    <div
-                      className="text-gray-400 text-sm"
-                      dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
-                    />
-                    <div className="text-gray-500 text-xs mt-2">
-                      {new Date(post.date).toLocaleDateString(locale, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                    {/* Card content */}
+                    <div className="p-4">
+                      <h2
+                        className="text-xl font-bold text-white mb-2"
+                        dangerouslySetInnerHTML={{ __html: post.title.rendered }}
+                      />
+                      <div
+                        className="text-gray-400 text-sm"
+                        dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+                      />
+                      <div className="text-gray-500 text-xs mt-2">
+                        {new Date(post.date).toLocaleDateString(locale, {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  </a>
                 </Link>
               );
             })}

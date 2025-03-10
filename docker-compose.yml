@@ -22,7 +22,7 @@ services:
     hostname: frontend
     build:
       context: ./frontend  # Specify the build context
-      dockerfile: Dockerfile.dev  # Specify the Dockerfile if it's named differently
+      dockerfile: Dockerfile  # Specify the Dockerfile if it's named differently
     ports:
       - "80:3000" # fastAPI web server
     stdin_open: true  # Equivalent to -i

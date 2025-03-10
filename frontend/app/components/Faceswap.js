@@ -151,7 +151,7 @@ const AutoSlider = ({ slides = [] }) => {
           <div key={index} className="w-full md:w-1/3 flex-none p-4">
             <div className="bg-black border border-gray-800 rounded-lg shadow-xl overflow-hidden flex flex-col h-full">
               {/* Using Next.js Image for static images */}
-              <div className="relative w-full h-48">
+              <div className="relative w-full h-80">
                 <Image
                   src={slide.image}
                   alt={slide.heading || `Slide ${index + 1}`}

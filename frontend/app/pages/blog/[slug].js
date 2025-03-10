@@ -26,13 +26,10 @@ export async function getStaticProps({ params, locale }) {
   );
   const posts = await res.json();
 
-  // If no post is found, redirect to the main blog page
+  // If no post is found, return notFound to render the 404 page
   if (!posts || posts.length === 0) {
     return {
-      redirect: {
-        destination: `/${locale}/blog`,
-        permanent: false,
-      },
+      notFound: true,
     };
   }
 
