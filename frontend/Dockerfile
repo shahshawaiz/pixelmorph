@@ -29,5 +29,8 @@ RUN npm install
 # Expose the app port
 EXPOSE 3000
 
+# build the app
+RUN npm run build
+
 # Start the server
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

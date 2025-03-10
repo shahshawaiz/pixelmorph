@@ -156,7 +156,6 @@ const AutoSlider = ({ slides = [] }) => {
                   src={slide.image}
                   alt={slide.heading || `Slide ${index + 1}`}
                   layout="fill"
-                  objectFit="cover"
                   className="rounded-t-lg"
                 />
               </div>

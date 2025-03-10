@@ -3,26 +3,26 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 import Meta from '../components/Meta';
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    const locale = ctx?.locale || 'en';
-    let metaData = { data: {} };
+  // static async getInitialProps(ctx) {
+  //   const initialProps = await Document.getInitialProps(ctx);
+  //   const locale = ctx?.locale || 'en';
+  //   let metaData = { data: {} };
 
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/faceswap?locale=${locale}`
-      );
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      metaData = await res.json();
-      console.log(metaData?.data?.seoTitle);
-    } catch (error) {
-      console.error("Error fetching meta data from Strapi:", error);
-    }
+  //   try {
+  //     const res = await fetch(
+  //       `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/faceswap?locale=${locale}`
+  //     );
+  //     if (!res.ok) {
+  //       throw new Error(`HTTP error! status: ${res.status}`);
+  //     }
+  //     metaData = await res.json();
+  //     console.log(metaData?.data?.seoTitle);
+  //   } catch (error) {
+  //     console.error("Error fetching meta data from Strapi:", error);
+  //   }
 
-    return { ...initialProps, metaData, locale };
-  }
+  //   return { ...initialProps, metaData, locale };
+  // }
 
   render() {
     const { locale, metaData } = this.props;
@@ -30,7 +30,7 @@ class MyDocument extends Document {
       <Html lang={locale}>
         <Head>
           {/* Inject dynamic meta data from Strapi */}
-          <Meta content={metaData?.data} />
+          {/* <Meta content={metaData?.data} /> */}
 
           {/* Inline Iubenda configuration script (critical for cookie consent) */}
           <script
