@@ -14,14 +14,14 @@ const defaultContent = {
   ogUrl: "", // Will default to structureWebsiteUrl if empty
 
   // Site structure
-  structureWebsiteUrl: "https://mydomain.com",
+  structureWebsiteUrl: "https://faceswaponline.ai",
   structureWebsiteName: "AI Face Swap Online for Photos | Free Face Swapper",
   structureWebsiteImage: "/images/faceswap/IMAGE1.webp", // fallback preview image
   previewImageUrl: "/images/faceswap/IMAGE1.webp",       // fallback preview image
 
   // Image alt
-  ogImgAlt: "AI Face Swap", // fallback alt text for social previews
-  imageAlt: "AI Face Swap", // fallback alt text for in-page images
+  ogImgAlt: "AI Faceswap", // fallback alt text for social previews
+  imageAlt: "AI Faceswap", // fallback alt text for in-page images
 
   // Twitter
   twitterTitle: "", // Will default to seoTitle if empty
@@ -31,27 +31,27 @@ const defaultContent = {
 const Meta = ({ content = {} }) => {
   // Merge defaults with user-provided content
   const mergedContent = { ...defaultContent, ...content };
-  
-  // get seo title from content (can be array if so, get first item)
-  if (Array.isArray(mergedContent.seoTitle)) {
-    mergedContent.seoTitle = mergedContent.seoTitle[0];
-  }
 
+  // Ensure that a title is a plain text string
+  const formatTitle = (title) => {
+    if (Array.isArray(title)) {
+      return title.map(item => String(item)).join(' ');
+    }
+    return String(title);
+  };
 
   return (
     <>
       {/* Basic SEO */}
-      <title>{mergedContent.seoTitle}</title>
-
-
-      <meta name="title" content={mergedContent.seoTitle} />
+      <title>{formatTitle(mergedContent.seoTitle)}</title>
+      <meta name="title" content={formatTitle(mergedContent.seoTitle)} />
       <meta name="description" content={mergedContent.metaDescription} />
       <meta name="keywords" content={mergedContent.keywords} />
 
       {/* Open Graph meta tags */}
       <meta
         property="og:title"
-        content={mergedContent.ogTitle || mergedContent.seoTitle}
+        content={mergedContent.ogTitle || formatTitle(mergedContent.seoTitle)}
       />
       <meta
         property="og:description"
@@ -72,13 +72,16 @@ const Meta = ({ content = {} }) => {
         content={mergedContent.ogImgAlt || mergedContent.imageAlt}
       />
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content={mergedContent.structureWebsiteName} />
+      <meta
+        property="og:site_name"
+        content={mergedContent.structureWebsiteName}
+      />
 
       {/* Twitter Card meta tags */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="twitter:title"
-        content={mergedContent.twitterTitle || mergedContent.seoTitle}
+        content={mergedContent.twitterTitle || formatTitle(mergedContent.seoTitle)}
       />
       <meta
         name="twitter:description"
@@ -93,7 +96,7 @@ const Meta = ({ content = {} }) => {
         }
       />
 
-      <link rel="icon" href="/favicon.ico"/>
+      <link rel="icon" href="https://faceswaponline.ai/logo.png" />
     </>
   );
 };
