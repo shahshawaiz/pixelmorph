@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start"
+        "start": "next start",
+        "postbuild": "next-sitemap"
     },
     "dependencies": {
         "@tailwindui/react": "^0.1.1",
@@ -19,6 +20,7 @@
         "multer": "^1.4.5-lts.1",
         "next": "^13.5.7",
         "next-connect": "^1.0.0",
+        "next-sitemap": "^4.2.3",
         "papaparse": "^5.4.1",
         "react": "18.2.0",
         "react-chartjs-2": "^5.2.0",

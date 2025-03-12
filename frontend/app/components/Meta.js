@@ -96,7 +96,7 @@ const Meta = ({ content = {} }) => {
         }
       />
 
-      <link rel="icon" href="https://faceswaponline.ai/logo.png" />
+      <link rel="icon" href="/favicon.ico" />
     </>
   );
 };
