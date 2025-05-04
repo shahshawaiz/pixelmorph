@@ -22,7 +22,7 @@ class MyDocument extends Document {
     // }
 
     // Build dynamic canonical URL **without** ctx.req
-    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, ''); 
+    const siteUrl = (process.env.NEXT_PUBLIC_DOMAIN || '').replace(/\/$/, ''); 
     const path = ctx.pathname || '/';
     const canonicalUrl = `${siteUrl}${path}`;
 
