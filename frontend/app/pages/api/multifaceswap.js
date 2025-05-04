@@ -51,7 +51,7 @@ export default async function handler(req, res) {
         formData.append('video', 'false');
 
         const apiResponse = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/multifaceswap`,
+          `${process.env.NEXT_PUBLIC_API_URL}/multiple-face-swap`,
           formData,
           {
             headers: { ...formData.getHeaders() },

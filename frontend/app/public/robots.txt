@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: # No specific disallows needed for this simple site
+
+Sitemap: https://faceswaponline.ai/sitemap.xml

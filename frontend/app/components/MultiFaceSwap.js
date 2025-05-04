@@ -155,7 +155,7 @@ const AutoSlider = ({ slides = [] }) => {
         {extendedSlides.map((slide, index) => (
           <div key={index} className="w-full md:w-1/3 flex-none p-4">
             <div className="bg-black border border-gray-800 rounded-lg shadow-xl overflow-hidden flex flex-col h-full">
-              <div className="relative w-full h-48">
+              <div className="relative w-full h-96">
                 <Image
                   src={slide.image}
                   alt={slide.heading || `Slide ${index + 1}`}
@@ -375,7 +375,7 @@ const MultiFaceSwap = () => {
             </div>
             <div className="md:w-1/2 flex justify-center">
               <Image
-                src="/images/multifaceswap/IMAGE 1a.webp"
+                src="/images/multifaceswap/IMAGE 1.jpg"
                 alt={content.imageAlt || 'Multi Face Swap Preview'}
                 width={600}
                 height={400}
@@ -553,18 +553,23 @@ const MultiFaceSwap = () => {
                   {
                     heading: content.whyH3_1,
                     text: content.whyContent1,
-                    image: '/images/faceswap/IMAGE 4.webp',
+                    image: '/images/multifaceswap/1. Group Celebrities Faceswap.png',
                   },
                   {
                     heading: content.whyH3_2,
                     text: content.whyContent2,
-                    image: '/images/faceswap/IMAGE 5.webp',
+                    image: '/images/multifaceswap/2. Fun family memes.png',
                   },
                   {
                     heading: content.whyH3_3,
                     text: content.whyContent3,
-                    image: '/images/faceswap/IMAGE 6.webp',
+                    image: '/images/multifaceswap/3. Social media A.png',
                   },
+                  {
+                    heading: content.whyH3_4,
+                    text: content.whyContent4,
+                    image: '/images/multifaceswap/4. Discover new looks.png',
+                  },                  
                 ]}
               />
             </div>

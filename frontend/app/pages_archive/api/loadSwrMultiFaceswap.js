@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     
     try {
       const response = await fetch(
-        `${apiUrl}/api/multifaceswap?locale=${locale}`
+        `${apiUrl}/api/multiple-face-swap?locale=${locale}`
       );
       
       if (!response.ok) {

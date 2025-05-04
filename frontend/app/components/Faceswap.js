@@ -151,7 +151,7 @@ const AutoSlider = ({ slides = [] }) => {
           <div key={index} className="w-full md:w-1/3 flex-none p-4">
             <div className="bg-black border border-gray-800 rounded-lg shadow-xl overflow-hidden flex flex-col h-full">
               {/* Using Next.js Image for static images */}
-              <div className="relative w-full h-80">
+              <div className="relative w-full h-96">
                 <Image
                   src={slide.image}
                   alt={slide.heading || `Slide ${index + 1}`}
@@ -602,7 +602,7 @@ const FaceSwap = () => {
                   </Link>
                 )}
                 {content.multiFaceswapToolsH2 && (
-                  <Link href="/multifaceswap" passHref>
+                  <Link href="/multiple-face-swap" passHref>
                     <div className="cursor-pointer">
                       <p className="text-xl font-semibold text-white mb-2">{content.multiFaceswapToolsH3_1}</p>
                       <p className="text-gray-400">{content.multiFaceswapToolsContent1}</p>
