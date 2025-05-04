@@ -22,7 +22,7 @@ class MyDocument extends Document {
     // }
 
     // Build dynamic canonical URL **without** ctx.req
-    const siteUrl = (process.env.NEXT_PUBLIC_DOMAIN || '');
+    const siteUrl = 'http://faceswaponline.ai'
     const path = ctx.asPath || ctx.pathname;
     const canonicalUrl = `${siteUrl}${path}`;
 
