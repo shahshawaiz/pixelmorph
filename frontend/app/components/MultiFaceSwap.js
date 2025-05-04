@@ -553,12 +553,12 @@ const MultiFaceSwap = () => {
                   {
                     heading: content.whyH3_1,
                     text: content.whyContent1,
-                    image: '/images/multifaceswap/1. Group Celebrities Faceswap.png',
+                    image: '/images/multifaceswap/2. Fun family memes.png',
                   },
                   {
                     heading: content.whyH3_2,
                     text: content.whyContent2,
-                    image: '/images/multifaceswap/2. Fun family memes.png',
+                    image: '/images/multifaceswap/1. Group Celebrities Faceswap.png',
                   },
                   {
                     heading: content.whyH3_3,

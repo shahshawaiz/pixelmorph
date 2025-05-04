@@ -3,29 +3,41 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 import Meta from '../components/Meta';
 
 class MyDocument extends Document {
-  // static async getInitialProps(ctx) {
-  //   const initialProps = await Document.getInitialProps(ctx);
-  //   const locale = ctx?.locale || 'en';
-  //   let metaData = { data: {} };
+  static async getInitialProps(ctx) {
+    const initialProps = await Document.getInitialProps(ctx);
 
-  //   try {
-  //     const res = await fetch(
-  //       `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/faceswap?locale=${locale}`
-  //     );
-  //     if (!res.ok) {
-  //       throw new Error(`HTTP error! status: ${res.status}`);
-  //     }
-  //     metaData = await res.json();
-  //     console.log(metaData?.data?.seoTitle);
-  //   } catch (error) {
-  //     console.error("Error fetching meta data from Strapi:", error);
-  //   }
+    // // Preserve your Strapi fetch logic as comments:
+    // const locale = ctx?.locale || 'en';
+    // let metaData = { data: {} };
+    // try {
+    //   const res = await fetch(
+    //     `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/faceswap?locale=${locale}`
+    //   );
+    //   if (!res.ok) {
+    //     throw new Error(`HTTP error! status: ${res.status}`);
+    //   }
+    //   metaData = await res.json();
+    // } catch (error) {
+    //   console.error("Error fetching meta data from Strapi:", error);
+    // }
 
-  //   return { ...initialProps, metaData, locale };
-  // }
+    // Build dynamic canonical URL **without** ctx.req
+    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, ''); 
+    const path = ctx.pathname || '/';
+    const canonicalUrl = `${siteUrl}${path}`;
+
+    return {
+      ...initialProps,
+      canonicalUrl,
+      // locale,
+      // metaData,
+    };
+  }
 
   render() {
-    const { locale, metaData } = this.props;
+    // locale & metaData are still here if you uncomment above
+    const { locale, metaData, canonicalUrl } = this.props;
+
     return (
       <Html lang={locale}>
         <Head>
@@ -48,16 +60,11 @@ class MyDocument extends Document {
               `,
             }}
           />
-          {/* 
-            Note: External Iubenda and Google Analytics scripts have been moved 
-            to _app.js using Next.js <Script> for better deferral and reduced blocking.
-          */}
-          {/* add canonical link */}
-          <link
-            rel="canonical"
-            href={`http://faceswaponline.ai/`}
-          />
-          <link rel="icon" href="logo.png" />
+
+          {/* Auto-generated canonical */}
+          <link rel="canonical" href={canonicalUrl} />
+
+          <link rel="icon" href="/logo.png" />
         </Head>
         <body>
           <Main />
