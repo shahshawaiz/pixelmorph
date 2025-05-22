@@ -10,3 +10,6 @@ backend/app/core/assets/models/faceswapper/**
 backend/app/core/assets/datasets/**
 backend/app/core/assets/uploads/**.mp4
 backend/app/core/assets/uploads/**.png
+
+# 
+deploy.sh
