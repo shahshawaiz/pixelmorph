@@ -263,17 +263,18 @@ def setup_app():
 
     return app
 
-
+# init server
 app = setup_app()
 
-# Run the application
-if __name__ == "__main__":
-    import uvicorn
+# # Run the application
+# if __name__ == "__main__":
+#     import uvicorn
 
-    # uvicorn.run(
-    #     app, 
-    #     host="0.0.0.0",
-    #     port=443,
-    #     ssl_certfile="/etc/letsencrypt/live/api.faceswaponline.ai/fullchain.pem",
-    #     ssl_keyfile="/etc/letsencrypt/live/api.faceswaponline.ai/privkey.pem",
-    # )
+#     app = setup_app()
+#     uvicorn.run(
+#         app, 
+#         host="0.0.0.0",
+#         port=443,
+#         ssl_certfile="/etc/letsencrypt/live/api.faceswaponline.ai/fullchain.pem",
+#         ssl_keyfile="/etc/letsencrypt/live/api.faceswaponline.ai/privkey.pem",
+#     )
