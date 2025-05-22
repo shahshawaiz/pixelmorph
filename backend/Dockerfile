@@ -32,8 +32,14 @@ COPY ./app .
 # Expose the desired ports
 EXPOSE 443
 
+COPY certs /app/certs
+
 # make init.sh executable
 RUN chmod +x ./init.sh
 
 # run init
-CMD ["sh", "./init.sh"]
+# CMD ["sh", "./init.sh"]
+CMD ["uvicorn", "server:app",
+     "--host", "0.0.0.0", "--port", "443",
+     "--ssl-certfile", "/app/certs/fullchain.pem",
+     "--ssl-keyfile",  "/app/certs/privkey.pem"]
