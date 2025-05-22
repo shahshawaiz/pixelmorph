@@ -39,7 +39,4 @@ RUN chmod +x ./init.sh
 
 # run init
 # CMD ["sh", "./init.sh"]
-CMD ["uvicorn", "server:app",
-     "--host", "0.0.0.0", "--port", "443",
-     "--ssl-certfile", "/app/certs/fullchain.pem",
-     "--ssl-keyfile",  "/app/certs/privkey.pem"]
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "443", "--ssl-certfile", "/app/certs/fullchain.pem", "--ssl-keyfile",  "/app/certs/privkey.pem"]
