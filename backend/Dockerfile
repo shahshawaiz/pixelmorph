@@ -30,9 +30,7 @@ RUN pip install -r requirements.txt
 COPY ./app .
 
 # Expose the desired ports
-EXPOSE 8765
-EXPOSE 8766
-EXPOSE 8888
+EXPOSE 443
 
 # make init.sh executable
 RUN chmod +x ./init.sh

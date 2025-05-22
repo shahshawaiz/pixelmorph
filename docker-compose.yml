@@ -6,7 +6,7 @@ services:
       context: ./backend  # Specify the build context
       dockerfile: Dockerfile  # Specify the Dockerfile if it's named differently
     ports:
-      - "443:8765" # fastAPI web server
+      - "443:443" # fastAPI web server
     stdin_open: true  # Equivalent to -i
     tty: true         # Equivalent to -t
     env_file:
