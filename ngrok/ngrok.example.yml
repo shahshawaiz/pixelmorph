@@ -1,0 +1,18 @@
+authtoken: <your-ngrok-token>  # never commit the real token
+console_ui: true
+log_level: info
+version: 2
+web_addr: localhost:4000
+tunnels:
+  frontend:
+    proto: http
+    addr: 3000
+    domain: pixelmorph.ngrok.app
+  server:
+    proto: http
+    addr: 8765
+    domain: pixelmorph-server.ngrok.app
+  cms:
+    proto: http
+    addr: 1337
+    domain: pixelmorph-cms.ngrok.app

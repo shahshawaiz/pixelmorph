@@ -13,3 +13,16 @@ backend/app/core/assets/uploads/**.png
 
 # 
 deploy.sh
+# Local CMS database (contains admin account) and Office lock files
+cms/data/*.db
+~$*
+*.pem
+*.key
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+
+# ngrok configs contain an auth token: keep them local, commit only ngrok.example.yml
+ngrok/ngrok.yml
+ngrok/ngrok.dev.yml
