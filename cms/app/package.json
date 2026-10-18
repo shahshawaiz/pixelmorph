@@ -34,5 +34,11 @@
   },
   "strapi": {
     "uuid": "11853da3-2578-4a1c-a507-9dd79fd2db29"
+  },
+  "author": "Shawaiz Shah <shahshawaiz@gmail.com> (https://shawaiz.de)",
+  "homepage": "https://shawaiz.de/demos/pixelmorph/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shahshawaiz/pixelmorph.git"
   }
 }

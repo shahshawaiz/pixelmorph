@@ -1,5 +1,7 @@
 # PixelMorph
 
+_By [Shawaiz Shah](https://shawaiz.de) · AI expert & Senior Data Scientist, Berlin · [more side projects](https://shawaiz.de/projects/)_
+
 AI image tools in one app: single- and multi-person **face swap**, **background removal** and **face-shape detection** with styling suggestions.
 
 **Who it's for:** people who want quick, fun photo edits (profile pictures, memes, trying new looks) without installing desktop software.
@@ -63,6 +65,10 @@ The face-swap model weights aren't in the repository (`backend/app/core/assets/m
 ## Roadmap
 
 See [ROADMAP.md](ROADMAP.md).
+
+## Author
+
+Built and maintained by **[Shawaiz Shah](https://shawaiz.de)**: portfolio, contact and more projects at [shawaiz.de](https://shawaiz.de) · [GitHub](https://github.com/shahshawaiz) · [LinkedIn](https://www.linkedin.com/in/shawaiz-shah-32b40537).
 
 ## License
 

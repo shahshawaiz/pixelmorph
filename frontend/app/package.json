@@ -38,5 +38,11 @@
         "postcss": "^8.4.49",
         "tailwindcss": "^3.4.15",
         "typescript": "5.7.2"
+    },
+    "author": "Shawaiz Shah <shahshawaiz@gmail.com> (https://shawaiz.de)",
+    "homepage": "https://shawaiz.de/demos/pixelmorph/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shahshawaiz/pixelmorph.git"
     }
 }
