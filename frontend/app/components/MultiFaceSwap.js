@@ -231,7 +231,7 @@ const MultiFaceSwap = () => {
     ogTitle: 'Multi Face Swap - AI Powered',
     ogDescription: 'Replace multiple faces in a group photo using advanced AI.',
     ogUrl: 'https://mydomain.com/multifaceswap',
-    previewImageUrl: '/images/multifaceswap/IMAGE1.webp',
+    previewImageUrl: '/images/placeholder.webp',
     imageAlt: 'Multi Face Swap Preview',
     twitterTitle: 'Multi Face Swap',
     twitterDescription: 'Swap multiple faces seamlessly with our AI tool.',
@@ -375,7 +375,7 @@ const MultiFaceSwap = () => {
             </div>
             <div className="md:w-1/2 flex justify-center">
               <Image
-                src="/images/multifaceswap/IMAGE 1.jpg"
+                src="/images/placeholder.webp"
                 alt={content.imageAlt || 'Multi Face Swap Preview'}
                 width={600}
                 height={400}
@@ -553,22 +553,22 @@ const MultiFaceSwap = () => {
                   {
                     heading: content.whyH3_1,
                     text: content.whyContent1,
-                    image: '/images/multifaceswap/2. Fun family memes.png',
+                    image: '/images/placeholder.webp',
                   },
                   {
                     heading: content.whyH3_2,
                     text: content.whyContent2,
-                    image: '/images/multifaceswap/1. Group Celebrities Faceswap.png',
+                    image: '/images/placeholder.webp',
                   },
                   {
                     heading: content.whyH3_3,
                     text: content.whyContent3,
-                    image: '/images/multifaceswap/3. Social media A.png',
+                    image: '/images/placeholder.webp',
                   },
                   {
                     heading: content.whyH3_4,
                     text: content.whyContent4,
-                    image: '/images/multifaceswap/4. Discover new looks.png',
+                    image: '/images/placeholder.webp',
                   },                  
                 ]}
               />

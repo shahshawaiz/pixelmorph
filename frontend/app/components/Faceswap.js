@@ -216,12 +216,12 @@ const FaceSwap = () => {
     structureWebsiteUrl: 'https://mydomain.com',
     structureWebsiteHeadline: 'AI Face Swap Online',
     structureWebsiteDescription: 'Swap faces instantly using advanced AI algorithms.',
-    structureWebsiteImage: '/images/faceswap/IMAGE 1.webp',
+    structureWebsiteImage: '/images/placeholder.webp',
     ogTitle: 'AI Face Swap - Instantly Swap Faces',
     ogDescription: 'Use our free online tool to swap faces in your photos.',
     ogUrl: 'https://mydomain.com/faceswap',
     ogImgAlt: 'Face Swap Preview',
-    previewImageUrl: '/images/faceswap/IMAGE 1.webp',
+    previewImageUrl: '/images/placeholder.webp',
     twitterTitle: 'AI Face Swap',
     twitterDescription: 'Easily swap faces online with AI.',
     imageAlt: 'Before and after face swap preview',
@@ -407,7 +407,7 @@ const FaceSwap = () => {
             </div>
             <div className="md:w-1/2 flex justify-center">
             <Image
-              src="/images/faceswap/IMAGE 1.webp"
+              src="/images/placeholder.webp"
               alt={content.imageAlt || 'Face Swap Preview'}
               width={600}
               height={400}
@@ -538,17 +538,17 @@ const FaceSwap = () => {
                   {
                     heading: content.whyH3_1,
                     text: content.whyContent1,
-                    image: '/images/faceswap/IMAGE 4.webp',
+                    image: '/images/placeholder.webp',
                   },
                   {
                     heading: content.whyH3_2,
                     text: content.whyContent2,
-                    image: '/images/faceswap/IMAGE 5.webp',
+                    image: '/images/placeholder.webp',
                   },
                   {
                     heading: content.whyH3_3,
                     text: content.whyContent3,
-                    image: '/images/faceswap/IMAGE 6.webp',
+                    image: '/images/placeholder.webp',
                   },
                 ]}
               />

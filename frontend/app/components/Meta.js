@@ -16,8 +16,8 @@ const defaultContent = {
   // Site structure
   structureWebsiteUrl: "https://faceswaponline.ai",
   structureWebsiteName: "AI Face Swap Online for Photos | Free Face Swapper",
-  structureWebsiteImage: "/images/faceswap/IMAGE1.webp", // fallback preview image
-  previewImageUrl: "/images/faceswap/IMAGE1.webp",       // fallback preview image
+  structureWebsiteImage: "/images/placeholder.webp", // fallback preview image
+  previewImageUrl: "/images/placeholder.webp",       // fallback preview image
 
   // Image alt
   ogImgAlt: "AI Faceswap", // fallback alt text for social previews
